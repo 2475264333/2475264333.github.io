@@ -2,58 +2,104 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AccelJoy - Welcome</title>
+    <title>Jiangsu AccelJoy Technology & Trading Co., Ltd.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Link to external CSS -->
     <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Indicate that this is a test website -->
-    <!-- <div class="test-site">
-        <p>This is a test website.</p>
-    </div> -->
-    <header>
-        <h1>Welcome to AccelJoy (Test Website)</h1>
-        <p>Your gateway to accelerated joy and innovation.</p>
-    </header>
+
+    <!-- Navigation Bar -->
     <nav>
-        <ul>
-            <li><a href="#home" class="active">Home</a></li>
+        <div class="logo">
+            <a href="#">AccelJoy</a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
             <li><a href="#about">About Us</a></li>
             <li><a href="#services">Our Services</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
+        <div class="burger">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
     </nav>
-    <main>
-        <!-- Home Section -->
-        <section id="home">
-            <h2>Home</h2>
-            <p>Discover the latest in technology and innovation with AccelJoy.</p>
-        </section>
 
-        <!-- About Us Section -->
-        <section id="about">
-            <h2>About Us</h2>
-            <p>At AccelJoy, we strive to accelerate joy through cutting-edge solutions.</p>
-        </section>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Welcome to AccelJoy</h1>
+            <p>Your trusted partner in international trading and technology solutions.</p>
+            <a href="#about" class="btn">Learn More</a>
+        </div>
+    </section>
 
-        <!-- Our Services Section -->
-        <section id="services">
-            <h2>Our Services</h2>
-            <ul>
-                <li>Innovation Consulting</li>
-                <li>Technology Solutions</li>
-                <li>Product Development</li>
-            </ul>
-        </section>
+    <!-- About Us Section -->
+    <section id="about" class="about">
+        <h2>About Us</h2>
+        <div class="about-content">
+            <div class="about-text">
+                <p>
+                    Jiangsu AccelJoy Technology & Trading Co., Ltd. is a leading company specializing in international trading and innovative technology solutions. With a global presence and a commitment to excellence, we bridge markets and deliver unparalleled value to our partners.
+                </p>
+            </div>
+            <div class="about-image">
+                <img src="images/about.jpg" alt="About Us">
+            </div>
+        </div>
+    </section>
 
-        <!-- Contact Section -->
-        <section id="contact">
-            <h2>Contact</h2>
-            <p>Email: <a href="mailto:info@acceljoy.com">info@acceljoy.com</a></p>
-        </section>
-    </main>
+    <!-- Our Services Section -->
+    <section id="services" class="services">
+        <h2>Our Services</h2>
+        <div class="services-content">
+            <div class="service-item">
+                <i class="fas fa-globe"></i>
+                <h3>International Trading</h3>
+                <p>Connecting businesses across the globe with efficient and reliable trading services.</p>
+            </div>
+            <div class="service-item">
+                <i class="fas fa-cogs"></i>
+                <h3>Technology Solutions</h3>
+                <p>Offering cutting-edge technology services tailored to your business needs.</p>
+            </div>
+            <div class="service-item">
+                <i class="fas fa-chart-line"></i>
+                <h3>Consulting</h3>
+                <p>Providing expert advice to help your business thrive in international markets.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <h2>Contact Us</h2>
+        <div class="contact-content">
+            <form action="#" method="post">
+                <input type="text" name="name" placeholder="Your Name" required>
+                <input type="email" name="email" placeholder="Your Email" required>
+                <textarea name="message" rows="6" placeholder="Your Message" required></textarea>
+                <button type="submit" class="btn">Send Message</button>
+            </form>
+            <div class="contact-info">
+                <p><i class="fas fa-map-marker-alt"></i> Jiangsu, China</p>
+                <p><i class="fas fa-envelope"></i> info@acceljoy.com</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2023 AccelJoy. All rights reserved.</p>
+        <p>&copy; 2024 Jiangsu AccelJoy Technology & Trading Co., Ltd. All rights reserved.</p>
     </footer>
+
+    <!-- External JS -->
+    <script src="script.js"></script>
+    <!-- Font Awesome CDN for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 </body>
 </html>
-
