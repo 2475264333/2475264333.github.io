@@ -1,105 +1,261 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>AccelJoy Tech</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Link to external CSS -->
-    <link rel="stylesheet" href="styles.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700&display=swap" rel="stylesheet">
-</head>
-<body>
+<!doctype html>
+<html lang="zh-CN" data-lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>迅洲科技 AccelJoy Tech | 人工智能与机器人公司</title>
+    <meta
+      name="description"
+      content="迅洲科技 AccelJoy Tech 专注于人工智能与机器人方向，融合海内外名校团队背景和 30 年进出口及工厂生产经验，探索面向真实产业场景的智能系统。"
+    />
+    <link rel="canonical" href="https://acceljoy.com/" />
+    <link rel="icon" href="./assets/logo.png" type="image/png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="AccelJoy Tech" />
+    <meta property="og:title" content="迅洲科技 AccelJoy Tech | 人工智能与机器人公司" />
+    <meta
+      property="og:description"
+      content="人工智能与机器人研究，结合海内外名校团队背景、30 年进出口与工厂生产经验。"
+    />
+    <meta property="og:url" content="https://acceljoy.com/" />
+    <meta property="og:image" content="https://acceljoy.com/assets/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="迅洲科技 AccelJoy Tech | 人工智能与机器人公司" />
+    <meta
+      name="twitter:description"
+      content="人工智能与机器人研究，结合海内外名校团队背景、30 年进出口与工厂生产经验。"
+    />
+    <meta name="twitter:image" content="https://acceljoy.com/assets/og.png" />
+    <link rel="preload" href="./assets/hero-lab.png" as="image" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main" data-i18n="skip">跳至正文</a>
 
-    <!-- Navigation Bar -->
-    <nav>
-        <div class="logo">
-            <a href="#">AccelJoy</a>
-        </div>
-        <ul class="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About Us</a></li>
-            <li><a href="#services">Our Services</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-        <div class="burger">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-    </nav>
+    <header class="site-header" aria-label="主导航">
+      <a class="brand" href="#top" aria-label="AccelJoy Tech 首页">
+        <span class="brand-mark" aria-hidden="true">
+          <img src="./assets/logo.png" alt="" decoding="async" />
+        </span>
+        <span class="brand-text">
+          <span>AccelJoy Tech</span>
+          <span>迅洲科技</span>
+        </span>
+      </a>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
+      <nav class="nav-links" aria-label="网站栏目">
+        <a href="#research" data-i18n="navResearch">研究方向</a>
+        <a href="#team" data-i18n="navTeam">创始团队</a>
+        <a href="#manufacturing" data-i18n="navManufacturing">制造与贸易</a>
+        <a href="#contact" data-i18n="navContact">联系</a>
+      </nav>
+
+      <div class="language-switch" aria-label="语言切换">
+        <button type="button" data-lang-option="zh" aria-pressed="true">CN</button>
+        <button type="button" data-lang-option="en" aria-pressed="false">EN</button>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <img
+          class="hero-image"
+          src="./assets/hero-lab.png"
+          alt=""
+          aria-hidden="true"
+          decoding="async"
+        />
+        <div class="hero-overlay" aria-hidden="true"></div>
+        <div class="hero-grid" aria-hidden="true"></div>
+
         <div class="hero-content">
-            <h1>Welcome to AccelJoy</h1>
-            <p>Your trusted partner in international trading and technology solutions.</p>
-            <a href="#about" class="btn">Learn More</a>
+          <p class="eyebrow" data-i18n="heroEyebrow">人工智能 · 机器人</p>
+          <h1 id="hero-title">
+            <span data-i18n="heroTitle">AccelJoy Tech</span>
+            <span class="hero-title-cn">迅洲科技</span>
+          </h1>
+          <p class="hero-copy" data-i18n="heroCopy">
+            迅洲科技 AccelJoy Tech 专注于机器人与人工智能方向的研究和应用探索。团队融合海内外名校背景、AI 技术视野，以及 30 年进出口与工厂生产经验，致力于把智能系统带进真实 C 端与 B 端应用。
+          </p>
+          <div class="hero-actions" aria-label="主要操作">
+            <a class="button primary" href="mailto:info@acceljoy.com">
+              <span data-i18n="ctaPrimary">联系合作</span>
+              <span aria-hidden="true">+</span>
+            </a>
+            <a class="button secondary" href="#research">
+              <span data-i18n="ctaSecondary">了解研究方向</span>
+              <span aria-hidden="true">/</span>
+            </a>
+          </div>
         </div>
-    </section>
+      </section>
 
-    <!-- About Us Section -->
-    <section id="about" class="about">
-        <h2>About Us</h2>
-        <div class="about-content">
-            <div class="about-text">
-                <p>
-                    Jiangsu AccelJoy Technology & Trading Co., Ltd. is a leading company specializing in international trading and innovative technology solutions. With a global presence and a commitment to excellence, we bridge markets and deliver unparalleled value to our partners.
-                </p>
-            </div>
-            <div class="about-image">
-                <img src="images/about.jpg" alt="About Us">
-            </div>
+      <section class="signal-strip" aria-label="公司亮点">
+        <div class="signal-item">
+          <span data-i18n="signalOneLabel">核心方向</span>
+          <strong data-i18n="signalOneValue">AI + 机器人</strong>
         </div>
-    </section>
-
-    <!-- Our Services Section -->
-    <section id="services" class="services">
-        <h2>Our Services</h2>
-        <div class="services-content">
-            <div class="service-item">
-                <i class="fas fa-globe"></i>
-                <h3>International Trading</h3>
-                <p>Connecting businesses across the globe with efficient and reliable trading services.</p>
-            </div>
-            <div class="service-item">
-                <i class="fas fa-cogs"></i>
-                <h3>Technology Solutions</h3>
-                <p>Offering cutting-edge technology services tailored to your business needs.</p>
-            </div>
-            <div class="service-item">
-                <i class="fas fa-chart-line"></i>
-                <h3>Consulting</h3>
-                <p>Providing expert advice to help your business thrive in international markets.</p>
-            </div>
+        <div class="signal-item">
+          <span data-i18n="signalTwoLabel">团队背景</span>
+          <strong data-i18n="signalTwoValue">清华、耶鲁、剑桥</strong>
         </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <h2>Contact Us</h2>
-        <div class="contact-content">
-            <form action="#" method="post">
-                <input type="text" name="name" placeholder="Your Name" required>
-                <input type="email" name="email" placeholder="Your Email" required>
-                <textarea name="message" rows="6" placeholder="Your Message" required></textarea>
-                <button type="submit" class="btn">Send Message</button>
-            </form>
-            <div class="contact-info">
-                <p><i class="fas fa-map-marker-alt"></i> JINSHENG BUILDING, NO. 53 SOUTH HAILING ROAD, DONGTAI, JIANGSU, CHINA </p>
-                <p><i class="fas fa-envelope"></i> info@acceljoy.com </p>
-            </div>
+        <div class="signal-item">
+          <span data-i18n="signalThreeLabel">产业基础</span>
+          <strong data-i18n="signalThreeValue">30 年进出口与工厂生产经验</strong>
         </div>
-    </section>
+      </section>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2024 Jiangsu AccelJoy Technology & Trading Co., Ltd. All rights reserved.</p>
+      <section class="section section-dark" id="research" aria-labelledby="research-title">
+        <div class="section-inner">
+          <div class="section-heading">
+            <p class="eyebrow" data-i18n="researchEyebrow">研究方向</p>
+            <h2 id="research-title" data-i18n="researchTitle">
+              让 AI 走进可感知、可行动的物理世界。
+            </h2>
+          </div>
+          <div class="section-copy">
+            <p data-i18n="researchIntro">
+              我们关注的不只是算法本身，而是 AI 如何理解环境、做出判断，并与机器人系统协同完成稳定、可靠的动作。
+            </p>
+          </div>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card">
+            <span class="card-index">01</span>
+            <h3 data-i18n="researchCardOneTitle">具身智能</h3>
+            <p data-i18n="researchCardOneText">
+              围绕感知、理解、决策与执行展开研究，探索智能体在复杂任务中的适应能力。
+            </p>
+          </article>
+          <article class="feature-card">
+            <span class="card-index">02</span>
+            <h3 data-i18n="researchCardTwoTitle">机器人系统</h3>
+            <p data-i18n="researchCardTwoText">
+              连接感知、控制、安全与机械结构，让机器人技术更接近可生产、可部署的系统形态。
+            </p>
+          </article>
+          <article class="feature-card">
+            <span class="card-index">03</span>
+            <h3 data-i18n="researchCardThreeTitle">应用型 AI 能力</h3>
+            <p data-i18n="researchCardThreeText">
+              面向真实场景建设基础能力，让实验室里的智能原型逐步走向产业应用。
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section section-light" id="team" aria-labelledby="team-title">
+        <div class="section-inner split">
+          <div class="section-heading">
+            <p class="eyebrow" data-i18n="teamEyebrow">创始团队</p>
+            <h2 id="team-title" data-i18n="teamTitle">
+              有国际视野，有技术，懂供应链。
+            </h2>
+          </div>
+          <div class="section-copy">
+            <p data-i18n="teamCopyOne">
+              创始团队来自清华大学、耶鲁大学、剑桥大学等海内外名校，兼具前沿研究视野与跨文化协作经验。
+            </p>
+            <p data-i18n="teamCopyTwo">
+              与此同时，团队拥有 30 年进出口和工厂生产经验，能够从制造、供应链和全球交付的角度理解技术落地。
+            </p>
+          </div>
+        </div>
+        <div class="credential-row" aria-label="团队背景">
+          <div class="credential">
+            <span data-i18n="credentialOneLabel">学术背景</span>
+            <strong data-i18n="credentialOneValue">中国 + 海外</strong>
+          </div>
+          <div class="credential">
+            <span data-i18n="credentialTwoLabel">研究视角</span>
+            <strong data-i18n="credentialTwoValue">AI、机器人、系统</strong>
+          </div>
+          <div class="credential">
+            <span data-i18n="credentialThreeLabel">产业经验</span>
+            <strong data-i18n="credentialThreeValue">工厂生产</strong>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="section section-dark manufacturing"
+        id="manufacturing"
+        aria-labelledby="manufacturing-title"
+      >
+        <div class="lab-lines" aria-hidden="true"></div>
+        <div class="section-inner">
+          <div class="section-heading">
+            <p class="eyebrow" data-i18n="manufacturingEyebrow">
+              制造与全球贸易
+            </p>
+            <h2 id="manufacturing-title" data-i18n="manufacturingTitle">
+              考虑技术的实际落地、生产以及全球销售。
+            </h2>
+          </div>
+          <div class="section-copy">
+            <p data-i18n="manufacturingCopy">
+              迅洲科技的优势不只在技术判断，也在对生产流程、供应链组织和跨境业务的长期理解。这让我们看待 AI 机器人时，不只看模型和样机，也会看它如何被制造、交付、维护和持续改进。
+            </p>
+          </div>
+        </div>
+        <div class="timeline" aria-label="运营能力">
+          <div class="timeline-item">
+            <span>01</span>
+            <strong data-i18n="timelineOneTitle">工厂视角</strong>
+            <p data-i18n="timelineOneText">
+              长期生产经验帮助团队更早识别可靠性、材料、装配和运营约束。
+            </p>
+          </div>
+          <div class="timeline-item">
+            <span>02</span>
+            <strong data-i18n="timelineTwoTitle">全球贸易经验</strong>
+            <p data-i18n="timelineTwoText">
+              进出口经验让团队更理解国际合作、市场需求与交付链路中的现实问题。
+            </p>
+          </div>
+          <div class="timeline-item">
+            <span>03</span>
+            <strong data-i18n="timelineThreeTitle">技术转化能力</strong>
+            <p data-i18n="timelineThreeText">
+              研究方向会结合可制造性、部署复杂度和长期服务能力一起评估。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-light vision" aria-labelledby="vision-title">
+        <div class="vision-panel">
+          <p class="eyebrow" data-i18n="visionEyebrow">愿景</p>
+          <h2 id="vision-title" data-i18n="visionTitle">
+            让智能机器真正走出实验室，进入产业以及消费者生活中，成为可靠、可用、可持续进化的生产力。
+          </h2>
+          <p data-i18n="visionCopy">
+            迅洲科技站在 AI 研究、机器人工程、制造经验与全球协作的交汇处，持续探索下一代智能系统。
+          </p>
+        </div>
+      </section>
+
+      <section class="contact-section" id="contact" aria-labelledby="contact-title">
+        <div class="contact-copy">
+          <p class="eyebrow" data-i18n="contactEyebrow">联系</p>
+          <h2 id="contact-title" data-i18n="contactTitle">
+            欢迎合作、媒体与投资交流。
+          </h2>
+        </div>
+        <a class="contact-link" href="mailto:info@acceljoy.com">
+          <span>info@acceljoy.com</span>
+          <span aria-hidden="true">+</span>
+        </a>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>© <span id="year">2026</span> AccelJoy Tech</span>
+      <span data-i18n="footerText">人工智能机器人研究与智能系统。</span>
     </footer>
-
-    <!-- External JS -->
-    <script src="script.js"></script>
-    <!-- Font Awesome CDN for icons -->
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-</body>
+  </body>
 </html>
