@@ -76,7 +76,7 @@ const translations = {
     heroEyebrow: "人工智能 · 机器人",
     heroTitle: "AccelJoy Tech",
     heroCopy:
-      "迅洲科技 AccelJoy Tech 专注于机器人与人工智能方向的研究和应用探索。团队融合海内外名校背景、AI 技术视野，以及 30 年进出口与工厂生产经验，致力于把智能系统带进真实 C 端与 B 端应用。",
+      "迅洲科技 AccelJoy Tech 专注于机器人与人工智能方向的研究和应用探索。团队融合海内外名校背景、AI 技术视野，以及 30 年进出口与工厂生产经验，致力于把具身智能带进 B 端制造业应用。",
     ctaPrimary: "联系合作",
     ctaSecondary: "了解研究方向",
     signalOneLabel: "核心方向",
