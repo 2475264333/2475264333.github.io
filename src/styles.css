@@ -557,36 +557,37 @@ h2 {
 .solar {
   position: relative;
   --solar-core: var(--paper);
-  --solar-edge-1: rgba(247, 245, 240, 0.86);
-  --solar-edge-2: rgba(226, 230, 232, 0.55);
-  --solar-edge-3: rgba(56, 71, 95, 0.28);
-  --solar-edge-4: rgba(22, 35, 58, 0.08);
   --solar-out-1: #efece4;
-  --solar-out-2: rgba(239, 236, 228, 0.85);
-  --solar-out-3: rgba(180, 186, 190, 0.5);
-  --solar-out-4: rgba(52, 66, 90, 0.26);
-  --solar-out-5: rgba(11, 20, 36, 0.06);
-  /* 简约主题下仍是深邃墨蓝窗景，与纸面通过长渐变带衔接 */
+  /* 过渡带（简约=纸色淡入淡出，星空=全透明隐形） */
+  --solar-top-1: rgba(247, 245, 240, 0.9);
+  --solar-top-2: rgba(233, 237, 238, 0.5);
+  --solar-top-3: rgba(233, 237, 238, 0.18);
+  --solar-top-4: rgba(233, 237, 238, 0);
+  --solar-bot-1: rgba(239, 236, 228, 0.85);
+  --solar-bot-2: rgba(239, 236, 228, 0.45);
+  --solar-bot-3: rgba(239, 236, 228, 0.14);
+  --solar-bot-4: rgba(239, 236, 228, 0);
+  /* 简约主题：明亮晨空窗景——浅蓝到暖纸的柔和渐变，与页面同为亮色 */
   background:
-    radial-gradient(120% 90% at 50% 0%, #16233a 0%, #0b1424 52%, #060b16 100%);
+    radial-gradient(120% 90% at 50% 0%, #dfe9f2 0%, #e9edee 52%, #f2f0ea 100%);
 }
 
 [data-theme='night'] .solar {
-  /* 星空主题：窗景融入整片夜空，上下不再需要强烈色差 */
+  /* 星空主题：窗景融入整片夜空，过渡带全透明隐形 */
   --solar-core: #0b0f17;
-  --solar-edge-1: rgba(11, 15, 23, 0);
-  --solar-edge-2: rgba(11, 15, 23, 0);
-  --solar-edge-3: rgba(11, 15, 23, 0);
-  --solar-edge-4: rgba(11, 15, 23, 0);
   --solar-out-1: #0b0f17;
-  --solar-out-2: rgba(11, 15, 23, 0);
-  --solar-out-3: rgba(11, 15, 23, 0);
-  --solar-out-4: rgba(11, 15, 23, 0);
-  --solar-out-5: rgba(11, 15, 23, 0);
+  --solar-top-1: rgba(11, 15, 23, 0);
+  --solar-top-2: rgba(11, 15, 23, 0);
+  --solar-top-3: rgba(11, 15, 23, 0);
+  --solar-top-4: rgba(11, 15, 23, 0);
+  --solar-bot-1: rgba(11, 15, 23, 0);
+  --solar-bot-2: rgba(11, 15, 23, 0);
+  --solar-bot-3: rgba(11, 15, 23, 0);
+  --solar-bot-4: rgba(11, 15, 23, 0);
   background: var(--paper);
 }
 
-/* 上下边缘的柔光过渡：简约主题色值对齐相邻纸色，星空主题隐形 */
+/* 上下边缘的柔光过渡：简约主题淡出入亮窗，星空主题隐形 */
 .solar::before,
 .solar::after {
   content: '';
@@ -597,29 +598,29 @@ h2 {
   pointer-events: none;
 }
 
-/* 顶缘：从纸色缓缓沉入窗景 */
+/* 顶缘：从纸色缓缓沉入亮窗 */
 .solar::before {
   top: 0;
   background: linear-gradient(
     180deg,
     var(--solar-core) 0%,
-    var(--solar-edge-1) 18%,
-    var(--solar-edge-2) 42%,
-    var(--solar-edge-3) 72%,
-    var(--solar-edge-4) 100%
+    var(--solar-top-1) 18%,
+    var(--solar-top-2) 42%,
+    var(--solar-top-3) 72%,
+    var(--solar-top-4) 100%
   );
 }
 
-/* 底缘：窗景缓缓浮出到相邻版块底色 */
+/* 底缘：亮窗缓缓浮出到相邻版块底色 */
 .solar::after {
   bottom: 0;
   background: linear-gradient(
     0deg,
     var(--solar-out-1) 0%,
-    var(--solar-out-2) 16%,
-    var(--solar-out-3) 40%,
-    var(--solar-out-4) 70%,
-    var(--solar-out-5) 100%
+    var(--solar-bot-1) 16%,
+    var(--solar-bot-2) 40%,
+    var(--solar-bot-3) 70%,
+    var(--solar-bot-4) 100%
   );
 }
 

@@ -368,7 +368,7 @@ export function SolarNav({
     scene.add(new THREE.AmbientLight(0x8fa3bf, 0.5))
 
     // ---- 星空 ----
-    // 星空主题下整页已是夜空，星星调暗融入背景；简约主题下是深色窗景，星星更亮
+    // 星空主题：白星错相微闪；简约主题：亮窗底色，星点换成柔和的天空微尘
     const nightMode = dataTheme === 'night'
     const makeStars = (count: number, size: number, opacity: number) => {
       const pos = new Float32Array(count * 3)
@@ -383,11 +383,11 @@ export function SolarNav({
       const geo = new THREE.BufferGeometry()
       geo.setAttribute('position', new THREE.BufferAttribute(pos, 3))
       const mat = new THREE.PointsMaterial({
-        color: '#cfe0ee',
+        color: nightMode ? '#cfe0ee' : '#8fb0c9',
         size,
         sizeAttenuation: false,
         transparent: true,
-        opacity,
+        opacity: nightMode ? opacity : opacity * 0.4,
         depthWrite: false,
       })
       scene.add(new THREE.Points(geo, mat))
@@ -520,9 +520,9 @@ export function SolarNav({
       const orbitLine = new THREE.Line(
         new THREE.BufferGeometry().setFromPoints(points),
         new THREE.LineBasicMaterial({
-          color: '#9db8cc',
+          color: nightMode ? '#9db8cc' : '#5a7d94',
           transparent: true,
-          opacity: 0.16,
+          opacity: nightMode ? 0.16 : 0.3,
         }),
       )
       orbitGroup.add(orbitLine)
