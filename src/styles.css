@@ -1,0 +1,679 @@
+/* ============================================================
+   AccelJoy Tech — 迅洲科技
+   设计语言：编辑杂志风 / 墨黑 × 暖纸白 × 釉青
+   原则：衬线大标题、真实内容、克制动效、无模板感
+   ============================================================ */
+
+/* ---------- 字体 ---------- */
+/* 中文标题：思源宋体（可变字重）；英文标题：Fraunces；正文：系统无衬线 */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Noto+Serif+SC:wght@500;600&display=swap');
+
+/* ---------- 设计令牌 ---------- */
+:root {
+  color-scheme: dark;
+
+  /* 色板 */
+  --ink: #17181a;          /* 墨黑（暖） */
+  --ink-soft: #3c3f43;
+  --paper: #f3f1ec;        /* 暖纸白 */
+  --paper-soft: #e8e5de;
+  --cream: #efece5;        /* 面包屑浅底 */
+  --glaze: #3ec6b4;        /* 釉青（品牌主色，取自 logo） */
+  --glaze-deep: #229487;
+  --line-dark: rgba(23, 24, 26, 0.14);
+  --line-light: rgba(243, 241, 236, 0.14);
+
+  /* 字体族 */
+  --serif:
+    'Fraunces', 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
+  --sans:
+    system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei',
+    sans-serif;
+
+  --w: min(1120px, calc(100% - 48px)); /* 内容宽度 */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- 基础 ---------- */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body::selection {
+  color: var(--ink);
+  background: var(--glaze);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+p,
+ol,
+figure,
+blockquote {
+  margin: 0;
+}
+
+/* 轻噪点：给纯色背景加一层极淡的颗粒，去"塑料感" */
+.grain::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+}
+
+/* ---------- 通用文字 ---------- */
+.eyebrow {
+  color: var(--glaze);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 22px;
+}
+
+h2 {
+  font-family: var(--serif);
+  font-size: clamp(34px, 4.6vw, 58px);
+  font-weight: 600;
+  line-height: 1.14;
+  letter-spacing: 0.005em;
+}
+
+/* ---------- 顶栏 ---------- */
+.site-header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  height: 66px;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--line-light);
+  background: rgba(23, 24, 26, 0.7);
+  backdrop-filter: blur(16px);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 7px;
+  object-fit: cover;
+}
+
+.nav-links {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.nav-links a {
+  padding: 9px 14px;
+  color: rgba(243, 241, 236, 0.68);
+  font-size: 14px;
+  border-radius: 99px;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: var(--paper);
+}
+
+.lang-switch {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line-light);
+  border-radius: 99px;
+}
+
+.lang-switch button {
+  min-width: 40px;
+  height: 32px;
+  color: rgba(243, 241, 236, 0.6);
+  background: transparent;
+  border: 0;
+  border-radius: 99px;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lang-switch button.on {
+  color: var(--ink);
+  background: var(--paper);
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  display: grid;
+  align-items: center;
+  min-height: 100svh;
+  overflow: hidden;
+  padding: 140px 24px 90px;
+}
+
+.hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 72% center;
+  opacity: 0.5;
+  filter: saturate(0.9) brightness(0.9);
+}
+
+.hero-veil {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 90% at 82% 40%, rgba(62, 198, 180, 0.14), transparent 55%),
+    linear-gradient(100deg, rgba(23, 24, 26, 0.97) 0%, rgba(23, 24, 26, 0.82) 38%, rgba(23, 24, 26, 0.28) 78%),
+    linear-gradient(180deg, rgba(23, 24, 26, 0.55), transparent 30%, rgba(23, 24, 26, 0.75));
+}
+
+.hero-inner {
+  position: relative;
+  width: var(--w);
+  margin: 0 auto;
+}
+
+.hero-title {
+  font-family: var(--serif);
+  font-size: clamp(52px, 8.6vw, 118px);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: 0.01em;
+  margin-bottom: 34px;
+}
+
+.hero-title .line {
+  display: block;
+}
+
+.hero-title .dim {
+  color: rgba(243, 241, 236, 0.44);
+}
+
+/* 标题入场：上移 + 渐显，一次就够 */
+.hero-title .line {
+  animation: rise 0.9s var(--ease) both;
+}
+
+.hero-title .line:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.hero-lead {
+  font-size: clamp(20px, 2.2vw, 26px);
+  font-weight: 500;
+  line-height: 1.5;
+  max-width: 22em;
+  margin-bottom: 18px;
+}
+
+.hero-body {
+  color: rgba(243, 241, 236, 0.72);
+  max-width: 36em;
+  margin-bottom: 40px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+/* ---------- 按钮 ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 50px;
+  padding: 14px 26px;
+  border-radius: 99px;
+  font-size: 15px;
+  font-weight: 600;
+  transition:
+    transform 0.25s var(--ease),
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn.solid {
+  color: var(--ink);
+  background: var(--glaze);
+}
+
+.btn.solid:hover {
+  background: #5ad4c3;
+}
+
+.btn.ghost {
+  color: var(--paper);
+  border: 1px solid var(--line-light);
+}
+
+.btn.ghost:hover {
+  border-color: rgba(243, 241, 236, 0.4);
+}
+
+/* ---------- 数据条 ---------- */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: var(--w);
+  margin: 0 auto;
+  padding: 34px 0;
+  border-top: 1px solid var(--line-light);
+  border-bottom: 1px solid var(--line-light);
+}
+
+.stat strong {
+  display: block;
+  font-family: var(--serif);
+  font-size: clamp(40px, 4.6vw, 62px);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--glaze);
+}
+
+.stat span {
+  display: block;
+  margin-top: 10px;
+  color: rgba(243, 241, 236, 0.6);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+}
+
+/* ---------- 跑马灯 ---------- */
+.marquee {
+  overflow: hidden;
+  padding: 26px 0;
+  border-bottom: 1px solid var(--line-light);
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: scroll 28s linear infinite;
+}
+
+.marquee-track span {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 500;
+  color: rgba(243, 241, 236, 0.55);
+  white-space: nowrap;
+}
+
+.marquee-track i {
+  font-style: normal;
+  margin: 0 26px;
+  color: var(--glaze);
+}
+
+@keyframes scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---------- 版块通用 ---------- */
+.section {
+  width: 100%;
+  padding: clamp(90px, 11vw, 140px) 24px;
+}
+
+.section.dark {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.section.light {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.section-head {
+  width: var(--w);
+  margin: 0 auto 56px;
+  max-width: 780px;
+}
+
+.section.light .eyebrow {
+  color: var(--glaze-deep);
+}
+
+.section-body {
+  margin-top: 22px;
+  font-size: 17px;
+  max-width: 34em;
+}
+
+.section.dark .section-body {
+  color: rgba(243, 241, 236, 0.68);
+}
+
+.section.light .section-body {
+  color: var(--ink-soft);
+}
+
+/* ---------- 编辑式编号列表（研究 / 制造） ---------- */
+.ed-list {
+  list-style: none;
+  width: var(--w);
+  margin: 0 auto;
+  padding: 0;
+}
+
+.ed-list li {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 20px;
+  padding: 34px 4px;
+  border-top: 1px solid;
+  transition: background-color 0.3s ease;
+}
+
+.section.dark .ed-list li {
+  border-color: var(--line-light);
+}
+
+.section.light .ed-list li {
+  border-color: var(--line-dark);
+}
+
+.ed-list li:hover {
+  background: rgba(62, 198, 180, 0.05);
+}
+
+.ed-n {
+  font-family: var(--serif);
+  font-size: 17px;
+  color: var(--glaze);
+  padding-top: 6px;
+}
+
+.section.light .ed-n {
+  color: var(--glaze-deep);
+}
+
+.ed-list h3 {
+  font-family: var(--serif);
+  font-size: clamp(22px, 2.4vw, 28px);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.ed-list p {
+  color: rgba(243, 241, 236, 0.66);
+  max-width: 40em;
+}
+
+.section.light .ed-list p {
+  color: var(--ink-soft);
+}
+
+/* ---------- 团队 ---------- */
+.team-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  width: var(--w);
+  margin: 0 auto;
+}
+
+.team-col {
+  padding: 36px 32px;
+  background: var(--cream);
+  border: 1px solid var(--line-dark);
+  border-radius: 4px;
+}
+
+.team-letter {
+  font-family: var(--serif);
+  font-size: 15px;
+  color: var(--glaze-deep);
+  display: block;
+  margin-bottom: 46px;
+}
+
+.team-col h3 {
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.team-col p {
+  color: var(--ink-soft);
+}
+
+.team-quote {
+  width: var(--w);
+  margin: 72px auto 0;
+  font-family: var(--serif);
+  font-size: clamp(24px, 3.4vw, 38px);
+  font-weight: 500;
+  line-height: 1.35;
+  max-width: 26em;
+}
+
+.team-quote::before {
+  content: '“';
+  color: var(--glaze-deep);
+  margin-right: 2px;
+}
+
+.team-quote::after {
+  content: '”';
+  color: var(--glaze-deep);
+  margin-left: 2px;
+}
+
+/* ---------- 愿景 ---------- */
+.vision {
+  width: 100%;
+  padding: clamp(110px, 14vw, 170px) 24px;
+  background: var(--ink);
+  text-align: center;
+}
+
+.vision .eyebrow {
+  justify-content: center;
+}
+
+.vision h2 {
+  max-width: 21em;
+  margin: 0 auto;
+}
+
+.vision p:not(.eyebrow) {
+  max-width: 30em;
+  margin: 26px auto 0;
+  color: rgba(243, 241, 236, 0.62);
+}
+
+/* ---------- 联系 ---------- */
+.contact {
+  padding: clamp(100px, 13vw, 150px) 24px;
+  background: var(--ink);
+  border-top: 1px solid var(--line-light);
+  text-align: center;
+}
+
+.contact-mail {
+  display: inline-block;
+  margin-top: 40px;
+  font-family: var(--serif);
+  font-size: clamp(26px, 5vw, 58px);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.contact-mail::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 100%;
+  height: 2px;
+  background: var(--glaze);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s var(--ease);
+}
+
+.contact-mail:hover {
+  color: var(--glaze);
+}
+
+.contact-mail:hover::after {
+  transform: scaleX(1);
+}
+
+/* ---------- 页脚 ---------- */
+.site-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 26px 24px;
+  border-top: 1px solid var(--line-light);
+  color: rgba(243, 241, 236, 0.5);
+  font-size: 13px;
+}
+
+/* ---------- 滚动渐显 ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 0.8s var(--ease),
+    transform 0.8s var(--ease);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 880px) {
+  .nav-links {
+    display: none;
+  }
+
+  .team-cols {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .site-header {
+    padding: 0 16px;
+    gap: 12px;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    padding: 28px 0;
+  }
+
+  .ed-list li {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .team-col {
+    padding: 28px 22px;
+  }
+
+  .site-footer {
+    flex-direction: column;
+  }
+}
+
+/* ---------- 降低动效偏好 ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
