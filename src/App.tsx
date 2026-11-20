@@ -7,6 +7,9 @@ import logo from '/assets/logo.png'
 const HeroWave = lazy(() =>
   import('./HeroWave').then((m) => ({ default: m.HeroWave })),
 )
+const RobotArmViewer = lazy(() =>
+  import('./RobotArm').then((m) => ({ default: m.RobotArmViewer })),
+)
 
 function Header() {
   const { lang, t, setLang } = useLang()
@@ -63,9 +66,12 @@ function Hero() {
             <a className="btn ghost" href="#business">{t.hero.ctaSecondary}</a>
           </div>
         </div>
-        <figure className="hero-figure">
-          <img src="/assets/hero-lab.png" alt="" aria-hidden="true" />
-        </figure>
+        <div className="hero-arm">
+          <Suspense fallback={null}>
+            <RobotArmViewer />
+          </Suspense>
+          <p className="arm-hint">{t.arm.hint}</p>
+        </div>
       </div>
     </section>
   )

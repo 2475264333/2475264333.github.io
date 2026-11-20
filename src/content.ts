@@ -47,6 +47,16 @@ export interface Dictionary {
   manufacturing: { eyebrow: string; title: string; body: string; items: ListItem[] }
   vision: { eyebrow: string; title: string; body: string }
   contact: { eyebrow: string; title: string }
+  arm: {
+    hint: string
+    auto: string
+    manual: string
+    base: string
+    shoulder: string
+    elbow: string
+    wrist: string
+    grip: string
+  }
   footer: string
 }
 
@@ -164,6 +174,16 @@ export const translations: Record<Lang, Dictionary> = {
     contact: {
       eyebrow: '联系',
       title: '合作、采购、渠道、投资——欢迎来信。',
+    },
+    arm: {
+      hint: '拖动旋转 · 滚轮缩放',
+      auto: '自动演示',
+      manual: '手动',
+      base: '基座',
+      shoulder: '肩关节',
+      elbow: '肘关节',
+      wrist: '腕关节',
+      grip: '夹爪',
     },
     footer: '工厂自动化 × 消费智能硬件，为落地而生。',
   },
@@ -287,6 +307,16 @@ export const translations: Record<Lang, Dictionary> = {
     contact: {
       eyebrow: 'Contact',
       title: 'Partnerships, procurement, distribution, investment — write to us.',
+    },
+    arm: {
+      hint: 'Drag to rotate · Scroll to zoom',
+      auto: 'Auto demo',
+      manual: 'Manual',
+      base: 'Base',
+      shoulder: 'Shoulder',
+      elbow: 'Elbow',
+      wrist: 'Wrist',
+      grip: 'Gripper',
     },
     footer: 'Factory automation × consumer hardware, built to ship.',
   },
