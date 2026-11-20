@@ -479,43 +479,68 @@ h2 {
   max-width: 36em;
 }
 
-/* ---------- 导航太阳系 ---------- */
+/* ---------- 导航太阳系（深空之窗） ---------- */
 .solar {
   position: relative;
-  background: var(--paper);
-  padding: clamp(40px, 6vw, 70px) 24px clamp(50px, 7vw, 80px);
   border-bottom: 1px solid var(--line);
+  /* 深邃墨蓝太空渐变——亮色网站里的一扇宇宙观景窗 */
+  background:
+    radial-gradient(120% 90% at 50% 0%, #16233a 0%, #0b1424 52%, #060b16 100%);
+}
+
+/* 上下边缘的柔光过渡，让"窗口"和纸面自然衔接 */
+.solar::before,
+.solar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 90px;
+  pointer-events: none;
+}
+
+.solar::before {
+  top: 0;
+  background: linear-gradient(180deg, var(--paper), transparent);
+}
+
+.solar::after {
+  bottom: 0;
+  background: linear-gradient(0deg, var(--paper), transparent);
 }
 
 .solar-canvas {
   position: relative;
-  height: clamp(420px, 52vw, 560px);
+  height: clamp(420px, 52vw, 580px);
   cursor: default;
-  touch-action: pan-y; /* 允许移动端上下滚页面，横向手势留给场景 */
+  touch-action: pan-y;
 }
 
 .solar-hint {
-  margin: 14px auto 0;
+  position: relative;
+  margin: 0 auto;
+  padding-bottom: 34px;
   text-align: center;
   font-size: 13px;
-  color: var(--ink-faint);
+  color: rgba(207, 224, 238, 0.55);
   letter-spacing: 0.04em;
 }
 
-/* 悬停行星时浮现的信息卡 */
+/* 悬停行星时浮现的信息卡（深空配色） */
 .solar-info {
   position: absolute;
   z-index: 5;
   display: flex;
   flex-direction: column;
   gap: 4px;
-  min-width: 180px;
-  max-width: 240px;
-  padding: 12px 16px;
+  min-width: 190px;
+  max-width: 250px;
+  padding: 13px 17px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.96);
-  border: 1px solid var(--line);
-  box-shadow: 0 12px 32px rgba(26, 28, 30, 0.16);
+  background: rgba(13, 21, 36, 0.92);
+  border: 1px solid rgba(159, 196, 222, 0.22);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
   pointer-events: none;
   font-family: var(--sans);
 }
@@ -523,20 +548,20 @@ h2 {
 .solar-info strong {
   font-family: var(--serif);
   font-size: 16px;
-  color: var(--ink);
+  color: #f2f6fa;
 }
 
 .solar-info span {
   font-size: 12.5px;
-  line-height: 1.5;
-  color: var(--ink-soft);
+  line-height: 1.55;
+  color: rgba(207, 224, 238, 0.72);
 }
 
 .solar-info em {
   font-style: normal;
   font-size: 12px;
   font-weight: 700;
-  color: var(--glaze);
+  color: #4adbc6;
 }
 
 /* ---------- 业务双栏（To B × To C，亮色） ---------- */
