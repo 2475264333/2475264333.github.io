@@ -10,6 +10,9 @@ const HeroWave = lazy(() =>
 const RobotArmViewer = lazy(() =>
   import('./RobotArm').then((m) => ({ default: m.RobotArmViewer })),
 )
+const SolarNav = lazy(() =>
+  import('./SolarNav').then((m) => ({ default: m.SolarNav })),
+)
 
 function Header() {
   const { lang, t, setLang } = useLang()
@@ -70,26 +73,9 @@ function Hero() {
           <Suspense fallback={null}>
             <RobotArmViewer />
           </Suspense>
-          <p className="arm-hint">{t.arm.hint}</p>
-        </div>      </div>
-    </section>
-  )
-}
-
-function Marquee() {
-  const { t } = useLang()
-  const row = [...t.marquee, ...t.marquee]
-  return (
-    <div className="marquee" aria-hidden="true">
-      <div className="marquee-track">
-        {row.map((word, i) => (
-          <span key={i}>
-            {word}
-            <i>·</i>
-          </span>
-        ))}
+        </div>
       </div>
-    </div>
+    </section>
   )
 }
 
@@ -104,6 +90,18 @@ function Stats() {
         </div>
       ))}
     </div>
+  )
+}
+
+function Solar() {
+  const { t } = useLang()
+  return (
+    <Reveal as="section" className="solar" id="solar">
+      <Suspense fallback={null}>
+        <SolarNav items={t.solar.items} goLabel={t.solar.go} />
+      </Suspense>
+      <p className="solar-hint">{t.solar.hint}</p>
+    </Reveal>
   )
 }
 
@@ -236,7 +234,7 @@ function Page() {
       <main className="grain">
         <Hero />
         <Stats />
-        <Marquee />
+        <Solar />
         <Business />
         <Team />
         <Manufacturing />

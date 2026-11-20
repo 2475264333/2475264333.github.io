@@ -47,15 +47,10 @@ export interface Dictionary {
   manufacturing: { eyebrow: string; title: string; body: string; items: ListItem[] }
   vision: { eyebrow: string; title: string; body: string }
   contact: { eyebrow: string; title: string }
-  arm: {
+  solar: {
     hint: string
-    auto: string
-    manual: string
-    base: string
-    shoulder: string
-    elbow: string
-    wrist: string
-    grip: string
+    go: string
+    items: { key: string; name: string; section: string; desc: string }[]
   }
   footer: string
 }
@@ -175,15 +170,16 @@ export const translations: Record<Lang, Dictionary> = {
       eyebrow: '联系',
       title: '合作、采购、渠道、投资——欢迎来信。',
     },
-    arm: {
-      hint: '拖动旋转视角 · 按住机械臂拖动可扳动关节',
-      auto: '',
-      manual: '',
-      base: '',
-      shoulder: '',
-      elbow: '',
-      wrist: '',
-      grip: '',
+    solar: {
+      hint: '悬停查看 · 点击前往',
+      go: '前往',
+      items: [
+        { key: 'business', name: '业务', section: '#business', desc: '工厂自动化 × 消费智能硬件，两条业务线' },
+        { key: 'team', name: '团队', section: '#team', desc: '清华、耶鲁、剑桥 × 30 年产业经验' },
+        { key: 'manufacturing', name: '制造与贸易', section: '#manufacturing', desc: '30 年工厂生产与进出口家底' },
+        { key: 'vision', name: '愿景', section: '#vision', desc: '让工厂更自动，让生活更智能' },
+        { key: 'contact', name: '联系', section: '#contact', desc: '合作、采购、渠道、投资，欢迎来信' },
+      ],
     },
     footer: '工厂自动化 × 消费智能硬件，为落地而生。',
   },
@@ -308,15 +304,16 @@ export const translations: Record<Lang, Dictionary> = {
       eyebrow: 'Contact',
       title: 'Partnerships, procurement, distribution, investment — write to us.',
     },
-    arm: {
-      hint: 'Drag to orbit · Hold & drag the arm to move its joints',
-      auto: '',
-      manual: '',
-      base: '',
-      shoulder: '',
-      elbow: '',
-      wrist: '',
-      grip: '',
+    solar: {
+      hint: 'Hover to explore · Click to navigate',
+      go: 'Go',
+      items: [
+        { key: 'business', name: 'Business', section: '#business', desc: 'Factory automation × consumer smart hardware' },
+        { key: 'team', name: 'Team', section: '#team', desc: 'Tsinghua, Yale, Cambridge × 30 years of industry' },
+        { key: 'manufacturing', name: 'Manufacturing', section: '#manufacturing', desc: '30 years of production and global trade' },
+        { key: 'vision', name: 'Vision', section: '#vision', desc: 'Smarter factories, smarter daily life' },
+        { key: 'contact', name: 'Contact', section: '#contact', desc: 'Partnerships, procurement, investment — write to us' },
+      ],
     },
     footer: 'Factory automation × consumer hardware, built to ship.',
   },
