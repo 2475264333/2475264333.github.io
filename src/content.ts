@@ -55,7 +55,7 @@ export const translations: Record<Lang, Dictionary> = {
     meta: {
       title: '迅洲科技 AccelJoy Tech | 工厂自动化 × 消费智能硬件',
       description:
-        '迅洲科技 AccelJoy Tech 做两条业务线：面向工厂的自动化——工业机器人与 AI 推理监控（视觉质检、安全监控、设备监测）；面向消费者的智能硬件与软件服务。团队来自清华、耶鲁、剑桥，30 年制造与进出口经验。',
+        '迅洲科技 AccelJoy Tech 做两条业务线：面向工厂的自动化——机器人、AI 监控等大多数产线需求；面向消费者的智能硬件与软件服务。团队来自清华、耶鲁、剑桥，30 年制造与进出口经验。',
     },
     nav: {
       business: '业务',
@@ -68,11 +68,11 @@ export const translations: Record<Lang, Dictionary> = {
       titleA: '迅洲科技',
       titleB: 'ACCELJOY TECH',
       lead: '让工厂更自动，让生活更智能。',
-      body: '迅洲科技做两条业务线：To B，给工厂做自动化——工业机器人，加上覆盖视觉质检、安全监控、设备监测的 AI 推理监控系统；To C，把技术做成消费级智能硬件和软件服务。团队来自清华、耶鲁、剑桥，家里做了 30 年工厂生产与进出口生意——我们知道怎么把技术做成产品，再把产品卖出去。',
+      body: '迅洲科技做两条业务线：To B，给工厂做自动化——机器人、AI 监控，以及产线自动化的大多数需求；To C，把技术做成消费级智能硬件和软件服务。团队来自清华、耶鲁、剑桥，家里做了 30 年工厂生产与进出口生意——我们知道怎么把技术做成产品，再把产品卖出去。',
       ctaPrimary: '聊聊合作',
       ctaSecondary: '看看我们做什么',
     },
-    marquee: ['工业机器人', 'AI 视觉质检', '安全监控', '设备监测', '消费智能硬件', '软件服务'],
+    marquee: ['工业机器人', 'AI 监控', '自动化系统集成', '消费智能硬件', '软件服务', '更多场景，欢迎来聊'],
     stats: [
       { value: '30', label: '年 · 制造与进出口经验' },
       { value: '3', label: '所 · 清华、耶鲁、剑桥' },
@@ -80,28 +80,24 @@ export const translations: Record<Lang, Dictionary> = {
     ],
     business: {
       eyebrow: '业务',
-      title: '我们造什么',
-      body: '两条线，一个底层能力：让 AI 在真实场景里稳定干活——无论场景是车间，还是客厅。',
+      title: '我们做什么',
+      body: '两条线，一个底层能力：让自动化和 AI 在真实场景里稳定干活。下面列的是常见场景——你的需求不在这里？大概率也能做，欢迎先聊。',
       b: {
         tag: 'To B',
         title: '工厂自动化',
-        body: '给产线装上眼睛和大脑：机器人干活，AI 盯质量、盯安全、盯设备。',
+        body: '给工厂装上自动化与 AI：机器人干活，系统盯质量、安全与设备。',
         items: [
           {
-            title: '工业机器人',
-            text: '面向产线的自动化机器人，从场景调研、系统集成到落地交付。',
+            title: '机器人与自动化',
+            text: '工业机器人、自动化产线与系统集成。',
           },
           {
-            title: 'AI 视觉质检',
-            text: '摄像头加推理模型，检测外观缺陷与装配到位情况——比人眼快，比人眼稳。',
+            title: 'AI 推理监控',
+            text: '质检、安全、设备状态等场景的监控与检测系统。',
           },
           {
-            title: '安全与行为监控',
-            text: '识别安全帽、危险区域、异常行为，在风险发生之前先预警。',
-          },
-          {
-            title: '设备状态监测',
-            text: '盯住设备运行状态和仪表读数，提前发现故障苗头——少停机，少抢修。',
+            title: '其他产线需求',
+            text: '工厂的需求五花八门，大多数我们都能做——说说你的场景。',
           },
         ],
       },
@@ -111,12 +107,12 @@ export const translations: Record<Lang, Dictionary> = {
         body: '把同一套技术做小、做好用，放进日常生活。',
         items: [
           {
-            title: '消费级智能硬件与机器人',
+            title: '消费级智能硬件',
             text: '面向家庭与个人用户的智能硬件产品。',
           },
           {
             title: '软件与服务',
-            text: '配套的软件产品与订阅服务——硬件之外，体验持续更新。',
+            text: '配套的软件产品与持续的服务。',
           },
         ],
       },
@@ -163,7 +159,7 @@ export const translations: Record<Lang, Dictionary> = {
     vision: {
       eyebrow: '愿景',
       title: '让工厂更自动，让生活更智能——并且是真的可靠、真的好用。',
-      body: '我们站在同一套能力的两条延长线上：一边把 AI 送进车间，一边把智能硬件送进日常。30 年制造与贸易的家底，让这两条路都走得通。',
+      body: '我们站在同一套能力的两条延长线上：一边把自动化送进车间，一边把智能硬件送进日常。30 年制造与贸易的家底，让这两条路都走得通。',
     },
     contact: {
       eyebrow: '联系',
@@ -175,7 +171,7 @@ export const translations: Record<Lang, Dictionary> = {
     meta: {
       title: 'AccelJoy Tech | Factory Automation × Consumer Hardware',
       description:
-        'AccelJoy Tech runs two product lines: factory automation — industrial robots and AI inference monitoring (visual inspection, safety monitoring, equipment monitoring); and consumer smart hardware with software services. Team from Tsinghua, Yale and Cambridge, with 30 years of manufacturing and trade.',
+        'AccelJoy Tech runs two product lines: factory automation — robots, AI monitoring and most production-line needs; and consumer smart hardware with software services. Team from Tsinghua, Yale and Cambridge, with 30 years of manufacturing and trade.',
     },
     nav: {
       business: 'Business',
@@ -188,17 +184,17 @@ export const translations: Record<Lang, Dictionary> = {
       titleA: 'AccelJoy Tech',
       titleB: '迅洲科技',
       lead: 'Smarter factories. Smarter daily life.',
-      body: 'AccelJoy Tech runs two product lines. To B: factory automation — industrial robots plus AI inference monitoring covering visual inspection, safety and equipment. To C: the same technology shaped into consumer smart hardware and software services. Our team came out of Tsinghua, Yale and Cambridge, with 30 years of manufacturing and trade behind us — we know how to turn technology into products, and products into shipments.',
+      body: 'AccelJoy Tech runs two product lines. To B: factory automation — robots, AI monitoring, and most automation needs on the production line. To C: the same technology shaped into consumer smart hardware and software services. Our team came out of Tsinghua, Yale and Cambridge, with 30 years of manufacturing and trade behind us — we know how to turn technology into products, and products into shipments.',
       ctaPrimary: 'Start a conversation',
       ctaSecondary: 'See what we build',
     },
     marquee: [
       'Industrial robots',
-      'Visual inspection',
-      'Safety monitoring',
-      'Equipment monitoring',
+      'AI monitoring',
+      'System integration',
       'Consumer hardware',
       'Software services',
+      'More — just ask',
     ],
     stats: [
       { value: '30', label: 'years in manufacturing & trade' },
@@ -207,28 +203,24 @@ export const translations: Record<Lang, Dictionary> = {
     ],
     business: {
       eyebrow: 'Business',
-      title: 'What we build',
-      body: 'Two lines, one core ability: AI that holds up in real environments — whether the scene is a factory floor or a living room.',
+      title: 'What we do',
+      body: 'Two lines, one core ability: automation and AI that hold up in real environments. What follows is the common ground — if your need isn’t listed, we can probably still do it. Talk to us first.',
       b: {
         tag: 'To B',
         title: 'Factory automation',
-        body: 'Eyes and brains for the production line: robots do the work while AI watches quality, safety and equipment.',
+        body: 'Automation and AI for the plant: robots do the work while systems watch quality, safety and equipment.',
         items: [
           {
-            title: 'Industrial robots',
-            text: 'Automation robots for production lines — from site surveys and system integration to delivery.',
+            title: 'Robots & automation',
+            text: 'Industrial robots, automated lines and system integration.',
           },
           {
-            title: 'AI visual inspection',
-            text: 'Cameras plus inference models for surface defects and assembly checks — faster and steadier than the human eye.',
+            title: 'AI inference monitoring',
+            text: 'Monitoring and inspection for quality, safety and equipment conditions.',
           },
           {
-            title: 'Safety & behavior monitoring',
-            text: 'Hard hats, hazardous zones, abnormal behavior — flagged before incidents happen.',
-          },
-          {
-            title: 'Equipment monitoring',
-            text: 'Machine conditions and gauge readings watched around the clock — fewer breakdowns, fewer emergency repairs.',
+            title: 'Other line needs',
+            text: 'Factory requirements come in all shapes — we can take on most of them. Tell us yours.',
           },
         ],
       },
@@ -238,12 +230,12 @@ export const translations: Record<Lang, Dictionary> = {
         body: 'The same technology, made smaller and friendlier, into daily life.',
         items: [
           {
-            title: 'Consumer smart hardware & robots',
+            title: 'Consumer smart hardware',
             text: 'Smart hardware products for homes and individual users.',
           },
           {
             title: 'Software & services',
-            text: 'Companion software and subscription services — the experience keeps improving after the box is opened.',
+            text: 'Companion software and ongoing services.',
           },
         ],
       },
@@ -290,7 +282,7 @@ export const translations: Record<Lang, Dictionary> = {
     vision: {
       eyebrow: 'Vision',
       title: 'Smarter factories, smarter daily life — actually reliable, actually usable.',
-      body: 'We work on two extensions of the same ability: carrying AI into the workshop, and smart hardware into everyday life. Thirty years of manufacturing and trade make both roads walkable.',
+      body: 'We work on two extensions of the same ability: carrying automation into the workshop, and smart hardware into everyday life. Thirty years of manufacturing and trade make both roads walkable.',
     },
     contact: {
       eyebrow: 'Contact',

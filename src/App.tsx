@@ -40,20 +40,23 @@ function Hero() {
   const { t } = useLang()
   return (
     <section className="hero" id="top">
-      <img className="hero-img" src="/assets/hero-lab.png" alt="" aria-hidden="true" />
-      <div className="hero-veil" aria-hidden="true" />
       <div className="hero-inner">
-        <p className="eyebrow">{t.hero.eyebrow}</p>
-        <h1 className="hero-title">
-          <span className="line">{t.hero.titleA}</span>
-          <span className="line dim">{t.hero.titleB}</span>
-        </h1>
-        <p className="hero-lead">{t.hero.lead}</p>
-        <p className="hero-body">{t.hero.body}</p>
-        <div className="hero-actions">
-          <a className="btn solid" href="mailto:info@acceljoy.com">{t.hero.ctaPrimary}</a>
-          <a className="btn ghost" href="#business">{t.hero.ctaSecondary}</a>
+        <div className="hero-copy">
+          <p className="eyebrow">{t.hero.eyebrow}</p>
+          <h1 className="hero-title">
+            <span className="line">{t.hero.titleA}</span>
+            <span className="line dim">{t.hero.titleB}</span>
+          </h1>
+          <p className="hero-lead">{t.hero.lead}</p>
+          <p className="hero-body">{t.hero.body}</p>
+          <div className="hero-actions">
+            <a className="btn solid" href="mailto:info@acceljoy.com">{t.hero.ctaPrimary}</a>
+            <a className="btn ghost" href="#business">{t.hero.ctaSecondary}</a>
+          </div>
         </div>
+        <figure className="hero-figure">
+          <img src="/assets/hero-lab.png" alt="" aria-hidden="true" />
+        </figure>
       </div>
     </section>
   )
@@ -94,7 +97,7 @@ function Business() {
   const { t } = useLang()
   const { b, c } = t.business
   return (
-    <Reveal as="section" className="section dark" id="business">
+    <Reveal as="section" className="section tinted" id="business">
       <div className="section-head">
         <p className="eyebrow">{t.business.eyebrow}</p>
         <h2>{t.business.title}</h2>
@@ -135,7 +138,7 @@ function Business() {
 function Team() {
   const { t } = useLang()
   return (
-    <Reveal as="section" className="section light" id="team">
+    <Reveal as="section" className="section team" id="team">
       <div className="section-head">
         <p className="eyebrow">{t.team.eyebrow}</p>
         <h2>{t.team.title}</h2>
@@ -157,7 +160,7 @@ function Team() {
 function Manufacturing() {
   const { t } = useLang()
   return (
-    <Reveal as="section" className="section dark" id="manufacturing">
+    <Reveal as="section" className="section" id="manufacturing">
       <div className="section-head">
         <p className="eyebrow">{t.manufacturing.eyebrow}</p>
         <h2>{t.manufacturing.title}</h2>
@@ -216,7 +219,7 @@ function Page() {
   return (
     <>
       <Header />
-      <main>
+      <main className="grain">
         <Hero />
         <Stats />
         <Marquee />
