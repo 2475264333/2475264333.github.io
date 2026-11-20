@@ -46,7 +46,8 @@ export function NeuralCore({ className = '' }: { className?: string }) {
       0.1,
       100,
     )
-    camera.position.set(0, 0.5, 7.4)
+    // 拉远相机：外围节点(半径至 ~3.1)与外环(3.95)完整入框，不再被画布裁切
+    camera.position.set(0, 0.5, 9.2)
 
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true })
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
@@ -103,7 +104,7 @@ export function NeuralCore({ className = '' }: { className?: string }) {
     const golden = Math.PI * (3 - Math.sqrt(5))
 
     for (let i = 0; i < NODE_COUNT; i++) {
-      const r = 2.1 + Math.pow(Math.random(), 0.7)
+      const r = 1.95 + Math.pow(Math.random(), 0.7) * 0.9
       const y = 1 - (i / (NODE_COUNT - 1)) * 2
       const rad = Math.sqrt(Math.max(0, 1 - y * y))
       const theta = golden * i
@@ -196,10 +197,10 @@ export function NeuralCore({ className = '' }: { className?: string }) {
         new THREE.LineBasicMaterial({ color, transparent: true, opacity }),
       )
     }
-    const ringA = makeRing(3.55, nightMode ? '#00e676' : '#149a89', nightMode ? 0.22 : 0.16)
+    const ringA = makeRing(3.3, nightMode ? '#00e676' : '#149a89', nightMode ? 0.22 : 0.16)
     ringA.rotation.x = Math.PI / 2.6
     ringA.rotation.z = 0.35
-    const ringB = makeRing(3.95, nightMode ? '#8fa3bf' : '#263135', nightMode ? 0.16 : 0.1)
+    const ringB = makeRing(3.65, nightMode ? '#8fa3bf' : '#263135', nightMode ? 0.16 : 0.1)
     ringB.rotation.x = Math.PI / 1.9
     ringB.rotation.z = -0.5
     spin.add(ringA, ringB)
