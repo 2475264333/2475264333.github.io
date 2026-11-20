@@ -51,6 +51,7 @@ export interface Dictionary {
     go: string
     items: { key: string; planet: string; name: string; section: string; desc: string }[]
   }
+  motto: string
   footer: string
 }
 
@@ -173,6 +174,7 @@ export const translations: Record<Lang, Dictionary> = {
         { key: 'contact', planet: '水星 Mercury', name: '联系我们', section: '#contact', desc: '距太阳最近的信使——一次联络，即刻启程' },
       ],
     },
+    motto: '为落地而生，为世界而来',
     footer: '工厂自动化 × 消费智能硬件——为落地而生，为世界而来。',
   },
   en: {
@@ -293,6 +295,7 @@ export const translations: Record<Lang, Dictionary> = {
         { key: 'contact', planet: 'Mercury', name: 'Contact', section: '#contact', desc: 'The closest messenger to the Sun — one message, and the journey begins' },
       ],
     },
+    motto: 'Built to ship, built for the world',
     footer: 'Factory automation × consumer hardware — built to ship, built for the world.',
   },
 }

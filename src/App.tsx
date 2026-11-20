@@ -229,6 +229,28 @@ function Contact() {
   )
 }
 
+function Motto() {
+  const { t } = useLang()
+  const chars = Array.from(t.motto)
+  return (
+    <div className="motto" aria-label={t.motto}>
+      <span className="motto-dash" aria-hidden="true">
+        ——
+      </span>
+      <span className="motto-text" aria-hidden="true">
+        {chars.map((ch, i) => (
+          <i key={i} style={{ '--d': `${i * 0.045}s` } as React.CSSProperties}>
+            {ch === ' ' ? '\u00A0' : ch}
+          </i>
+        ))}
+      </span>
+      <span className="motto-dash" aria-hidden="true">
+        ——
+      </span>
+    </div>
+  )
+}
+
 function Footer() {
   const { t } = useLang()
   return (
@@ -252,6 +274,7 @@ function Page() {
         <Manufacturing />
         <Vision />
         <Contact />
+        <Motto />
       </main>
       <Footer />
     </>

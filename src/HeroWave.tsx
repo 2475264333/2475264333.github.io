@@ -53,7 +53,7 @@ export function HeroWave({ className = '' }: { className?: string }) {
     const positions = new Float32Array(count * 3)
     const colors = new Float32Array(count * 3)
 
-    const base = new THREE.Color(dataTheme === 'night' ? '#2dd4bd' : '#149a89')
+    const base = new THREE.Color(dataTheme === 'night' ? '#00e676' : '#149a89')
     const soft = new THREE.Color(dataTheme === 'night' ? '#3d5570' : '#9bb8ad')
 
     let i = 0

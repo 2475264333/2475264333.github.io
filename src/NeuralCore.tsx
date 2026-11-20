@@ -72,7 +72,7 @@ export function NeuralCore({ className = '' }: { className?: string }) {
     // 星空主题下环境暗，内核 emissive 提亮保持视觉分量
     const coreMat = new THREE.MeshStandardMaterial({
       color: nightMode ? '#0d6e61' : '#0d5f55',
-      emissive: nightMode ? '#2dd4bd' : '#14b8a5',
+      emissive: nightMode ? '#00e676' : '#14b8a5',
       emissiveIntensity: nightMode ? 1.0 : 0.85,
       metalness: 0.3,
       roughness: 0.35,
@@ -141,7 +141,7 @@ export function NeuralCore({ className = '' }: { className?: string }) {
     const lines = new THREE.LineSegments(
       lineGeo,
       new THREE.LineBasicMaterial({
-        color: nightMode ? '#2dd4bd' : '#149a89',
+        color: nightMode ? '#00e676' : '#149a89',
         transparent: true,
         opacity: nightMode ? 0.26 : 0.18,
       }),
@@ -196,7 +196,7 @@ export function NeuralCore({ className = '' }: { className?: string }) {
         new THREE.LineBasicMaterial({ color, transparent: true, opacity }),
       )
     }
-    const ringA = makeRing(3.55, nightMode ? '#2dd4bd' : '#149a89', nightMode ? 0.22 : 0.16)
+    const ringA = makeRing(3.55, nightMode ? '#00e676' : '#149a89', nightMode ? 0.22 : 0.16)
     ringA.rotation.x = Math.PI / 2.6
     ringA.rotation.z = 0.35
     const ringB = makeRing(3.95, nightMode ? '#8fa3bf' : '#263135', nightMode ? 0.16 : 0.1)
