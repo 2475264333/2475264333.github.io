@@ -11,7 +11,7 @@ function Header() {
         <span className="brand-text">AccelJoy<span aria-hidden="true"> · </span>迅洲</span>
       </a>
       <nav className="nav-links" aria-label="导航">
-        <a href="#research">{t.nav.research}</a>
+        <a href="#business">{t.nav.business}</a>
         <a href="#team">{t.nav.team}</a>
         <a href="#manufacturing">{t.nav.manufacturing}</a>
         <a href="#contact">{t.nav.contact}</a>
@@ -52,7 +52,7 @@ function Hero() {
         <p className="hero-body">{t.hero.body}</p>
         <div className="hero-actions">
           <a className="btn solid" href="mailto:info@acceljoy.com">{t.hero.ctaPrimary}</a>
-          <a className="btn ghost" href="#research">{t.hero.ctaSecondary}</a>
+          <a className="btn ghost" href="#business">{t.hero.ctaSecondary}</a>
         </div>
       </div>
     </section>
@@ -90,26 +90,44 @@ function Stats() {
   )
 }
 
-function Research() {
+function Business() {
   const { t } = useLang()
+  const { b, c } = t.business
   return (
-    <Reveal as="section" className="section dark" id="research">
+    <Reveal as="section" className="section dark" id="business">
       <div className="section-head">
-        <p className="eyebrow">{t.research.eyebrow}</p>
-        <h2>{t.research.title}</h2>
-        <p className="section-body">{t.research.body}</p>
+        <p className="eyebrow">{t.business.eyebrow}</p>
+        <h2>{t.business.title}</h2>
+        <p className="section-body">{t.business.body}</p>
       </div>
-      <ol className="ed-list">
-        {t.research.items.map((item) => (
-          <li key={item.n}>
-            <span className="ed-n">{item.n}</span>
-            <div>
-              <h3>{item.title}</h3>
-              <p>{item.text}</p>
-            </div>
-          </li>
-        ))}
-      </ol>
+      <div className="biz-grid">
+        <div className="biz-track biz-b">
+          <span className="biz-tag">{b.tag}</span>
+          <h3>{b.title}</h3>
+          <p className="biz-lead">{b.body}</p>
+          <ul className="biz-items">
+            {b.items.map((item) => (
+              <li key={item.title}>
+                <strong>{item.title}</strong>
+                <p>{item.text}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="biz-track biz-c">
+          <span className="biz-tag">{c.tag}</span>
+          <h3>{c.title}</h3>
+          <p className="biz-lead">{c.body}</p>
+          <ul className="biz-items">
+            {c.items.map((item) => (
+              <li key={item.title}>
+                <strong>{item.title}</strong>
+                <p>{item.text}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </Reveal>
   )
 }
@@ -202,7 +220,7 @@ function Page() {
         <Hero />
         <Stats />
         <Marquee />
-        <Research />
+        <Business />
         <Team />
         <Manufacturing />
         <Vision />

@@ -11,9 +11,21 @@ export interface ListItem {
   text: string
 }
 
+export interface BizItem {
+  title: string
+  text: string
+}
+
+export interface BizTrack {
+  tag: string
+  title: string
+  body: string
+  items: BizItem[]
+}
+
 export interface Dictionary {
   meta: { title: string; description: string }
-  nav: { research: string; team: string; manufacturing: string; contact: string }
+  nav: { business: string; team: string; manufacturing: string; contact: string }
   hero: {
     eyebrow: string
     titleA: string
@@ -25,7 +37,7 @@ export interface Dictionary {
   }
   marquee: string[]
   stats: Stat[]
-  research: { eyebrow: string; title: string; body: string; items: ListItem[] }
+  business: { eyebrow: string; title: string; body: string; b: BizTrack; c: BizTrack }
   team: {
     eyebrow: string
     title: string
@@ -41,52 +53,73 @@ export interface Dictionary {
 export const translations: Record<Lang, Dictionary> = {
   zh: {
     meta: {
-      title: '迅洲科技 AccelJoy Tech | AI 与机器人公司',
+      title: '迅洲科技 AccelJoy Tech | 工厂自动化 × 消费智能硬件',
       description:
-        '迅洲科技研究机器人与人工智能。团队来自清华、耶鲁、剑桥，家里做了 30 年工厂与进出口生意。我们做能被制造出来、卖得出去的智能系统。',
+        '迅洲科技 AccelJoy Tech 做两条业务线：面向工厂的自动化——工业机器人与 AI 推理监控（视觉质检、安全监控、设备监测）；面向消费者的智能硬件与软件服务。团队来自清华、耶鲁、剑桥，30 年制造与进出口经验。',
     },
     nav: {
-      research: '研究方向',
+      business: '业务',
       team: '团队',
       manufacturing: '制造与贸易',
       contact: '联系',
     },
     hero: {
-      eyebrow: '人工智能 · 机器人 · 制造',
+      eyebrow: '工厂自动化 · 消费智能硬件',
       titleA: '迅洲科技',
       titleB: 'ACCELJOY TECH',
-      lead: '我们把 AI 装进机器，再让机器走进产线。',
-      body: '迅洲科技研究具身智能与机器人系统。团队来自清华、耶鲁、剑桥；家里做了 30 年工厂生产与进出口生意。论文和出货之间隔着什么，我们一清二楚——那正是我们的主场。',
+      lead: '让工厂更自动，让生活更智能。',
+      body: '迅洲科技做两条业务线：To B，给工厂做自动化——工业机器人，加上覆盖视觉质检、安全监控、设备监测的 AI 推理监控系统；To C，把技术做成消费级智能硬件和软件服务。团队来自清华、耶鲁、剑桥，家里做了 30 年工厂生产与进出口生意——我们知道怎么把技术做成产品，再把产品卖出去。',
       ctaPrimary: '聊聊合作',
-      ctaSecondary: '看看我们在做什么',
+      ctaSecondary: '看看我们做什么',
     },
-    marquee: ['具身智能', '机器人系统', '感知与控制', '智能制造', '全球交付'],
+    marquee: ['工业机器人', 'AI 视觉质检', '安全监控', '设备监测', '消费智能硬件', '软件服务'],
     stats: [
       { value: '30', label: '年 · 制造与进出口经验' },
       { value: '3', label: '所 · 清华、耶鲁、剑桥' },
-      { value: '1', label: '条主线 · 让 AI 走进物理世界' },
+      { value: '2', label: '条业务线 · To B 自动化 × To C 硬件' },
     ],
-    research: {
-      eyebrow: '研究',
-      title: '我们在做什么',
-      body: '不追热点，也不堆名词。目标只有一条：让 AI 在物理世界里站得稳、拿得准、做得久。',
-      items: [
-        {
-          n: '01',
-          title: '具身智能',
-          text: '感知、决策、执行。让智能体在真实任务里自己想办法——不是演示视频里的完美环境，是有灰尘、有偏差、有干扰的产线。',
-        },
-        {
-          n: '02',
-          title: '机器人系统',
-          text: '把感知、控制、安全和机械结构接成一整套。单个模块跑分好看只是起点，整套系统长期稳定才算数。',
-        },
-        {
-          n: '03',
-          title: '从样机到产品',
-          text: '实验室里能跑，和车间里能用，中间隔着材料、装配、成本、良率。这段路，我们走了 30 年。',
-        },
-      ],
+    business: {
+      eyebrow: '业务',
+      title: '我们造什么',
+      body: '两条线，一个底层能力：让 AI 在真实场景里稳定干活——无论场景是车间，还是客厅。',
+      b: {
+        tag: 'To B',
+        title: '工厂自动化',
+        body: '给产线装上眼睛和大脑：机器人干活，AI 盯质量、盯安全、盯设备。',
+        items: [
+          {
+            title: '工业机器人',
+            text: '面向产线的自动化机器人，从场景调研、系统集成到落地交付。',
+          },
+          {
+            title: 'AI 视觉质检',
+            text: '摄像头加推理模型，检测外观缺陷与装配到位情况——比人眼快，比人眼稳。',
+          },
+          {
+            title: '安全与行为监控',
+            text: '识别安全帽、危险区域、异常行为，在风险发生之前先预警。',
+          },
+          {
+            title: '设备状态监测',
+            text: '盯住设备运行状态和仪表读数，提前发现故障苗头——少停机，少抢修。',
+          },
+        ],
+      },
+      c: {
+        tag: 'To C',
+        title: '智能硬件与服务',
+        body: '把同一套技术做小、做好用，放进日常生活。',
+        items: [
+          {
+            title: '消费级智能硬件与机器人',
+            text: '面向家庭与个人用户的智能硬件产品。',
+          },
+          {
+            title: '软件与服务',
+            text: '配套的软件产品与订阅服务——硬件之外，体验持续更新。',
+          },
+        ],
+      },
     },
     team: {
       eyebrow: '团队',
@@ -108,7 +141,7 @@ export const translations: Record<Lang, Dictionary> = {
     manufacturing: {
       eyebrow: '制造与贸易',
       title: '技术要落地，先得造得出来。',
-      body: '样机好看不难，难的是量产：良率、成本、供应链、交期，然后过海关、到地球另一边的货架上。这些环节我们熟——不是调研来的，是一单一单做出来的。',
+      body: '样机好看不难，难的是量产。无论是发往工厂的自动化设备，还是送到用户手里的硬件，走的都是同一条路：良率、成本、供应链、交期——然后过海关，到地球另一边的货架上。这些环节我们熟，不是调研来的，是一单一单做出来的。',
       items: [
         {
           n: '01',
@@ -129,63 +162,91 @@ export const translations: Record<Lang, Dictionary> = {
     },
     vision: {
       eyebrow: '愿景',
-      title: '智能机器，不该只活在演示视频里。',
-      body: '我们想让它们走进工厂和日常生活——可靠、耐用，并且一代比一代更强。',
+      title: '让工厂更自动，让生活更智能——并且是真的可靠、真的好用。',
+      body: '我们站在同一套能力的两条延长线上：一边把 AI 送进车间，一边把智能硬件送进日常。30 年制造与贸易的家底，让这两条路都走得通。',
     },
     contact: {
       eyebrow: '联系',
-      title: '合作、媒体、投资——欢迎来信。',
+      title: '合作、采购、渠道、投资——欢迎来信。',
     },
-    footer: 'AI 与机器人研究，为落地而生。',
+    footer: '工厂自动化 × 消费智能硬件，为落地而生。',
   },
   en: {
     meta: {
-      title: 'AccelJoy Tech | AI & Robotics Company',
+      title: 'AccelJoy Tech | Factory Automation × Consumer Hardware',
       description:
-        'AccelJoy Tech works on robotics and AI. The team spans Tsinghua, Yale and Cambridge, with 30 years of manufacturing and import-export behind it. We build intelligent systems that can actually be made and sold.',
+        'AccelJoy Tech runs two product lines: factory automation — industrial robots and AI inference monitoring (visual inspection, safety monitoring, equipment monitoring); and consumer smart hardware with software services. Team from Tsinghua, Yale and Cambridge, with 30 years of manufacturing and trade.',
     },
     nav: {
-      research: 'Research',
+      business: 'Business',
       team: 'Team',
       manufacturing: 'Manufacturing',
       contact: 'Contact',
     },
     hero: {
-      eyebrow: 'AI · Robotics · Manufacturing',
+      eyebrow: 'Factory Automation · Consumer Hardware',
       titleA: 'AccelJoy Tech',
       titleB: '迅洲科技',
-      lead: 'We put AI into machines — and machines onto the factory floor.',
-      body: 'AccelJoy Tech researches embodied intelligence and robotic systems. Our team came out of Tsinghua, Yale and Cambridge; our family has run factories and cross-border trade for 30 years. We know exactly what stands between a paper and a shipped product — that gap is our home turf.',
+      lead: 'Smarter factories. Smarter daily life.',
+      body: 'AccelJoy Tech runs two product lines. To B: factory automation — industrial robots plus AI inference monitoring covering visual inspection, safety and equipment. To C: the same technology shaped into consumer smart hardware and software services. Our team came out of Tsinghua, Yale and Cambridge, with 30 years of manufacturing and trade behind us — we know how to turn technology into products, and products into shipments.',
       ctaPrimary: 'Start a conversation',
-      ctaSecondary: 'See what we do',
+      ctaSecondary: 'See what we build',
     },
-    marquee: ['Embodied intelligence', 'Robotic systems', 'Perception & control', 'Smart manufacturing', 'Global delivery'],
+    marquee: [
+      'Industrial robots',
+      'Visual inspection',
+      'Safety monitoring',
+      'Equipment monitoring',
+      'Consumer hardware',
+      'Software services',
+    ],
     stats: [
       { value: '30', label: 'years in manufacturing & trade' },
       { value: '3', label: 'schools — Tsinghua, Yale, Cambridge' },
-      { value: '1', label: 'focus — AI into the physical world' },
+      { value: '2', label: 'product lines — To B automation × To C hardware' },
     ],
-    research: {
-      eyebrow: 'Research',
-      title: 'What we work on',
-      body: 'Not chasing benchmarks. The brief is simple: AI that can perceive, act, and hold up in the physical world.',
-      items: [
-        {
-          n: '01',
-          title: 'Embodied intelligence',
-          text: 'Perception, decision-making, execution. Agents that figure real tasks out on their own — not in pristine demo environments, but on floors with dust, drift and interference.',
-        },
-        {
-          n: '02',
-          title: 'Robotic systems',
-          text: 'Sensing, control, safety and mechanics wired into one whole. A module that tops a leaderboard is a start; a system that runs for years is the point.',
-        },
-        {
-          n: '03',
-          title: 'Prototype to product',
-          text: 'Running in the lab and working in the plant are separated by materials, assembly, cost and yield. We have walked that road for 30 years.',
-        },
-      ],
+    business: {
+      eyebrow: 'Business',
+      title: 'What we build',
+      body: 'Two lines, one core ability: AI that holds up in real environments — whether the scene is a factory floor or a living room.',
+      b: {
+        tag: 'To B',
+        title: 'Factory automation',
+        body: 'Eyes and brains for the production line: robots do the work while AI watches quality, safety and equipment.',
+        items: [
+          {
+            title: 'Industrial robots',
+            text: 'Automation robots for production lines — from site surveys and system integration to delivery.',
+          },
+          {
+            title: 'AI visual inspection',
+            text: 'Cameras plus inference models for surface defects and assembly checks — faster and steadier than the human eye.',
+          },
+          {
+            title: 'Safety & behavior monitoring',
+            text: 'Hard hats, hazardous zones, abnormal behavior — flagged before incidents happen.',
+          },
+          {
+            title: 'Equipment monitoring',
+            text: 'Machine conditions and gauge readings watched around the clock — fewer breakdowns, fewer emergency repairs.',
+          },
+        ],
+      },
+      c: {
+        tag: 'To C',
+        title: 'Smart hardware & services',
+        body: 'The same technology, made smaller and friendlier, into daily life.',
+        items: [
+          {
+            title: 'Consumer smart hardware & robots',
+            text: 'Smart hardware products for homes and individual users.',
+          },
+          {
+            title: 'Software & services',
+            text: 'Companion software and subscription services — the experience keeps improving after the box is opened.',
+          },
+        ],
+      },
     },
     team: {
       eyebrow: 'Team',
@@ -207,7 +268,7 @@ export const translations: Record<Lang, Dictionary> = {
     manufacturing: {
       eyebrow: 'Manufacturing & Trade',
       title: 'Technology ships only if it can be built.',
-      body: 'A handsome prototype is easy. Production is not: yield, cost, supply chain, deadlines — then customs, and a shelf on the other side of the world. We know these steps the honest way: order by order.',
+      body: 'A handsome prototype is easy. Production is not. Whether it is automation equipment headed for a plant or hardware headed for a user’s hands, the road is the same: yield, cost, supply chain, deadlines — then customs, and a shelf on the other side of the world. We know these steps the honest way: order by order.',
       items: [
         {
           n: '01',
@@ -222,19 +283,19 @@ export const translations: Record<Lang, Dictionary> = {
         {
           n: '03',
           title: 'Tech translation',
-          text: 'Every research direction faces three questions first: Can we build it? Can customers afford it? Can we service it?',
+          text: 'Every direction faces three questions first: Can we build it? Can customers afford it? Can we service it?',
         },
       ],
     },
     vision: {
       eyebrow: 'Vision',
-      title: 'Intelligent machines shouldn’t live in demo reels.',
-      body: 'We want them on factory floors and in daily life — reliable, durable, and improving with every generation.',
+      title: 'Smarter factories, smarter daily life — actually reliable, actually usable.',
+      body: 'We work on two extensions of the same ability: carrying AI into the workshop, and smart hardware into everyday life. Thirty years of manufacturing and trade make both roads walkable.',
     },
     contact: {
       eyebrow: 'Contact',
-      title: 'Partnerships, media, investment — write to us.',
+      title: 'Partnerships, procurement, distribution, investment — write to us.',
     },
-    footer: 'AI & robotics research, built to ship.',
+    footer: 'Factory automation × consumer hardware, built to ship.',
   },
 }

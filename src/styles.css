@@ -476,6 +476,116 @@ h2 {
   color: var(--ink-soft);
 }
 
+/* ---------- 业务双栏（To B × To C） ---------- */
+.biz-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 18px;
+  width: var(--w);
+  margin: 0 auto;
+  align-items: stretch;
+}
+
+.biz-track {
+  border-radius: 6px;
+  padding: 34px 30px;
+}
+
+/* B 端：深色车间感，釉青描边 */
+.biz-b {
+  background: rgba(62, 198, 180, 0.055);
+  border: 1px solid rgba(62, 198, 180, 0.28);
+}
+
+/* C 端：浅色生活感 */
+.biz-c {
+  background: var(--cream);
+  border: 1px solid var(--line-dark);
+  color: var(--ink);
+}
+
+.biz-tag {
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 22px;
+}
+
+.biz-b .biz-tag {
+  color: var(--glaze);
+  border: 1px solid rgba(62, 198, 180, 0.45);
+}
+
+.biz-c .biz-tag {
+  color: var(--glaze-deep);
+  border: 1px solid rgba(34, 148, 135, 0.4);
+}
+
+.biz-track h3 {
+  font-family: var(--serif);
+  font-size: clamp(24px, 2.8vw, 32px);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.biz-lead {
+  font-size: 15px;
+  margin-bottom: 26px;
+  max-width: 30em;
+}
+
+.biz-b .biz-lead {
+  color: rgba(243, 241, 236, 0.62);
+}
+
+.biz-c .biz-lead {
+  color: var(--ink-soft);
+}
+
+.biz-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.biz-items li {
+  padding: 18px 0;
+  border-top: 1px solid;
+}
+
+.biz-b .biz-items li {
+  border-color: var(--line-light);
+}
+
+.biz-c .biz-items li {
+  border-color: var(--line-dark);
+}
+
+.biz-items strong {
+  display: block;
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.biz-items p {
+  font-size: 14.5px;
+  line-height: 1.65;
+  max-width: 36em;
+}
+
+.biz-b .biz-items p {
+  color: rgba(243, 241, 236, 0.62);
+}
+
+.biz-c .biz-items p {
+  color: var(--ink-soft);
+}
+
 /* ---------- 团队 ---------- */
 .team-cols {
   display: grid;
@@ -628,6 +738,10 @@ h2 {
   }
 
   .team-cols {
+    grid-template-columns: 1fr;
+  }
+
+  .biz-grid {
     grid-template-columns: 1fr;
   }
 }
