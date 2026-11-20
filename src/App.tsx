@@ -198,7 +198,7 @@ function Manufacturing() {
 function Vision() {
   const { t } = useLang()
   return (
-    <Reveal as="section" className="vision">
+    <Reveal as="section" className="vision" id="vision">
       <p className="eyebrow">{t.vision.eyebrow}</p>
       <h2>{t.vision.title}</h2>
       <p>{t.vision.body}</p>

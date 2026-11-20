@@ -446,6 +446,8 @@ export function SolarNav({
       hover: number
     }
     const planets: Planet[] = []
+    // 可拾取集合：行星本体 + 土星环（环是行星视觉的一部分，点了也该响应）
+    const pickables: THREE.Object3D[] = []
 
     labelsRef.current.items.forEach((item, i) => {
       const spec: PlanetSpec = { ...item, ...PLANET_STYLES[i] }
@@ -467,6 +469,8 @@ export function SolarNav({
         }),
       )
       mesh.rotation.z = 0.12 + Math.random() * 0.15
+      mesh.userData.planetIndex = i
+      pickables.push(mesh)
 
       const atmosMat = makeAtmosphereMaterial(
         ATMOS[spec.kind].color,
@@ -493,6 +497,8 @@ export function SolarNav({
           }),
         )
         ring.rotation.x = Math.PI / 2 - 0.32
+        ring.userData.planetIndex = i
+        pickables.push(ring)
         body.add(ring)
       }
 
@@ -536,13 +542,10 @@ export function SolarNav({
       ndc.x = ((e.clientX - rect.left) / rect.width) * 2 - 1
       ndc.y = -((e.clientY - rect.top) / rect.height) * 2 + 1
       raycaster.setFromCamera(ndc, camera)
-      const hits = raycaster.intersectObjects(
-        planets.map((p) => p.mesh),
-        false,
-      )
+      const hits = raycaster.intersectObjects(pickables, false)
       if (hits.length > 0) {
-        const mesh = hits[0].object as THREE.Mesh
-        return planets.find((p) => p.mesh === mesh) ?? null
+        const idx = hits[0].object.userData.planetIndex as number
+        return planets[idx] ?? null
       }
       return null
     }
