@@ -26,11 +26,13 @@ interface PlanetSpec extends SolarItem {
  * 对应版块：业务→火星(行动) 团队→地球(家园) 制造→木星(巨行星) 愿景→土星(光环) 联系→水星(信使)
  */
 const PLANET_STYLES: Omit<PlanetSpec, keyof SolarItem>[] = [
-  { orbit: 6.2, size: 0.72, speed: 0.3, phase: 0.4, tilt: 0.06, kind: 'mars' },
-  { orbit: 8.6, size: 0.85, speed: 0.25, phase: 1.9, tilt: -0.09, kind: 'earth' },
-  { orbit: 11.4, size: 1.45, speed: 0.19, phase: 3.3, tilt: 0.04, kind: 'jupiter' },
-  { orbit: 14.2, size: 1.2, speed: 0.15, phase: 4.6, tilt: -0.12, kind: 'saturn' },
-  { orbit: 16.8, size: 0.55, speed: 0.12, phase: 5.5, tilt: 0.08, kind: 'mercury' },
+  // 轨道顺序 = 真实距日排序：水星 6.0 < 地球 8.6 < 火星 11.2 < 木星 14.2 < 土星 17.2
+  // 公转速度遵循开普勒第三定律：离太阳越近越快（水星 0.52 → 土星 0.10）
+  { orbit: 11.0, size: 0.72, speed: 0.26, phase: 0.4, tilt: 0.06, kind: 'mars' },
+  { orbit: 8.4, size: 0.85, speed: 0.34, phase: 1.9, tilt: -0.09, kind: 'earth' },
+  { orbit: 13.6, size: 1.45, speed: 0.16, phase: 3.3, tilt: 0.04, kind: 'jupiter' },
+  { orbit: 16.2, size: 1.2, speed: 0.1, phase: 4.6, tilt: -0.12, kind: 'saturn' },
+  { orbit: 5.8, size: 0.55, speed: 0.52, phase: 5.5, tilt: 0.08, kind: 'mercury' },
 ]
 
 /* ============ 程序化行星纹理（全部 Canvas 生成，零图片素材） ============ */
