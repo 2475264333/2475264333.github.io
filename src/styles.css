@@ -476,8 +476,13 @@ h2 {
   border-bottom: 1px solid var(--line);
 }
 
+.stat {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
 .stat strong {
-  display: block;
   font-family: var(--serif);
   font-size: clamp(40px, 4.6vw, 60px);
   font-weight: 500;
@@ -486,8 +491,6 @@ h2 {
 }
 
 .stat span {
-  display: block;
-  margin-top: 10px;
   color: var(--ink-soft);
   font-size: 14px;
   letter-spacing: 0.02em;
@@ -893,8 +896,9 @@ h2 {
 }
 
 .contact-mail {
-  display: inline-block;
-  margin-top: 40px;
+  display: block;
+  width: fit-content;
+  margin: 40px auto 0;
   font-family: var(--serif);
   font-size: clamp(26px, 5vw, 58px);
   font-weight: 500;
