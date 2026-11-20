@@ -50,7 +50,7 @@ export interface Dictionary {
   solar: {
     hint: string
     go: string
-    items: { key: string; name: string; section: string; desc: string }[]
+    items: { key: string; planet: string; name: string; section: string; desc: string }[]
   }
   footer: string
 }
@@ -174,11 +174,11 @@ export const translations: Record<Lang, Dictionary> = {
       hint: '悬停查看 · 点击前往',
       go: '前往',
       items: [
-        { key: 'business', name: '业务', section: '#business', desc: '工厂自动化 × 消费智能硬件，两条业务线' },
-        { key: 'team', name: '团队', section: '#team', desc: '清华、耶鲁、剑桥 × 30 年产业经验' },
-        { key: 'manufacturing', name: '制造与贸易', section: '#manufacturing', desc: '30 年工厂生产与进出口家底' },
-        { key: 'vision', name: '愿景', section: '#vision', desc: '让工厂更自动，让生活更智能' },
-        { key: 'contact', name: '联系', section: '#contact', desc: '合作、采购、渠道、投资，欢迎来信' },
+        { key: 'business', planet: '火星 Mars', name: '业务', section: '#business', desc: '锈红色的行动之星——工厂自动化 × 消费智能硬件，两条业务线' },
+        { key: 'team', planet: '地球 Earth', name: '团队', section: '#team', desc: '我们的家园——清华、耶鲁、剑桥 × 30 年产业经验' },
+        { key: 'manufacturing', planet: '木星 Jupiter', name: '制造与贸易', section: '#manufacturing', desc: '最大的巨行星——30 年工厂生产与进出口的庞大家底' },
+        { key: 'vision', planet: '土星 Saturn', name: '愿景', section: '#vision', desc: '戴着光环的远行者——让工厂更自动，让生活更智能' },
+        { key: 'contact', planet: '水星 Mercury', name: '联系', section: '#contact', desc: '跑得最快的信使——合作、采购、渠道、投资，欢迎来信' },
       ],
     },
     footer: '工厂自动化 × 消费智能硬件，为落地而生。',
@@ -308,11 +308,11 @@ export const translations: Record<Lang, Dictionary> = {
       hint: 'Hover to explore · Click to navigate',
       go: 'Go',
       items: [
-        { key: 'business', name: 'Business', section: '#business', desc: 'Factory automation × consumer smart hardware' },
-        { key: 'team', name: 'Team', section: '#team', desc: 'Tsinghua, Yale, Cambridge × 30 years of industry' },
-        { key: 'manufacturing', name: 'Manufacturing', section: '#manufacturing', desc: '30 years of production and global trade' },
-        { key: 'vision', name: 'Vision', section: '#vision', desc: 'Smarter factories, smarter daily life' },
-        { key: 'contact', name: 'Contact', section: '#contact', desc: 'Partnerships, procurement, investment — write to us' },
+        { key: 'business', planet: 'Mars', name: 'Business', section: '#business', desc: 'The red planet of action — factory automation × consumer smart hardware' },
+        { key: 'team', planet: 'Earth', name: 'Team', section: '#team', desc: 'Home. Tsinghua, Yale, Cambridge × 30 years of industry' },
+        { key: 'manufacturing', planet: 'Jupiter', name: 'Manufacturing', section: '#manufacturing', desc: 'The giant — 30 years of production and global trade' },
+        { key: 'vision', planet: 'Saturn', name: 'Vision', section: '#vision', desc: 'The ringed voyager — smarter factories, smarter daily life' },
+        { key: 'contact', planet: 'Mercury', name: 'Contact', section: '#contact', desc: 'The fastest messenger — partnerships, procurement, investment' },
       ],
     },
     footer: 'Factory automation × consumer hardware, built to ship.',
