@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
+import { useDataTheme } from './useDataTheme'
 
 /**
  * NeuralCore：AI 智能核心可视化（首屏主视觉）。
@@ -25,10 +26,13 @@ const clamp = (v: number, min: number, max: number) =>
 
 export function NeuralCore({ className = '' }: { className?: string }) {
   const mountRef = useRef<HTMLDivElement | null>(null)
+  const dataTheme = useDataTheme()
 
   useEffect(() => {
     const mount = mountRef.current
     if (!mount) return
+
+    const nightMode = dataTheme === 'night'
 
     const reduceMotion = window.matchMedia(
       '(prefers-reduced-motion: reduce)',
@@ -65,10 +69,11 @@ export function NeuralCore({ className = '' }: { className?: string }) {
     scene.add(tilt)
 
     // ---- 内核：脉动发光体 + 线框外壳 ----
+    // 星空主题下环境暗，内核 emissive 提亮保持视觉分量
     const coreMat = new THREE.MeshStandardMaterial({
-      color: '#0d5f55',
-      emissive: '#14b8a5',
-      emissiveIntensity: 0.85,
+      color: nightMode ? '#0d6e61' : '#0d5f55',
+      emissive: nightMode ? '#2dd4bd' : '#14b8a5',
+      emissiveIntensity: nightMode ? 1.0 : 0.85,
       metalness: 0.3,
       roughness: 0.35,
     })
@@ -110,7 +115,7 @@ export function NeuralCore({ className = '' }: { className?: string }) {
       const mesh = new THREE.Mesh(
         nodeGeo,
         new THREE.MeshStandardMaterial({
-          color: '#263135',
+          color: nightMode ? '#c8d2dc' : '#263135',
           metalness: 0.55,
           roughness: 0.35,
         }),
@@ -136,9 +141,9 @@ export function NeuralCore({ className = '' }: { className?: string }) {
     const lines = new THREE.LineSegments(
       lineGeo,
       new THREE.LineBasicMaterial({
-        color: '#149a89',
+        color: nightMode ? '#2dd4bd' : '#149a89',
         transparent: true,
-        opacity: 0.18,
+        opacity: nightMode ? 0.26 : 0.18,
       }),
     )
     spin.add(lines)
@@ -191,10 +196,10 @@ export function NeuralCore({ className = '' }: { className?: string }) {
         new THREE.LineBasicMaterial({ color, transparent: true, opacity }),
       )
     }
-    const ringA = makeRing(3.55, '#149a89', 0.16)
+    const ringA = makeRing(3.55, nightMode ? '#2dd4bd' : '#149a89', nightMode ? 0.22 : 0.16)
     ringA.rotation.x = Math.PI / 2.6
     ringA.rotation.z = 0.35
-    const ringB = makeRing(3.95, '#263135', 0.1)
+    const ringB = makeRing(3.95, nightMode ? '#8fa3bf' : '#263135', nightMode ? 0.16 : 0.1)
     ringB.rotation.x = Math.PI / 1.9
     ringB.rotation.z = -0.5
     spin.add(ringA, ringB)
@@ -328,7 +333,7 @@ export function NeuralCore({ className = '' }: { className?: string }) {
       renderer.dispose()
       mount.removeChild(renderer.domElement)
     }
-  }, [])
+  }, [dataTheme])
 
   return <div ref={mountRef} className={`core-canvas ${className}`.trim()} />
 }

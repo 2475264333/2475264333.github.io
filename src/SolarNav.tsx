@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
+import { useDataTheme } from './useDataTheme'
 
 export interface SolarItem {
   key: string
@@ -329,6 +330,7 @@ export function SolarNav({
   goLabel: string
 }) {
   const mountRef = useRef<HTMLDivElement | null>(null)
+  const dataTheme = useDataTheme()
   const labelsRef = useRef<{ items: SolarItem[]; goLabel: string }>({
     items,
     goLabel,
@@ -365,7 +367,9 @@ export function SolarNav({
     scene.add(sunLight)
     scene.add(new THREE.AmbientLight(0x8fa3bf, 0.5))
 
-    // ---- 星空两层错相微闪 ----
+    // ---- 星空 ----
+    // 星空主题下整页已是夜空，星星调暗融入背景；简约主题下是深色窗景，星星更亮
+    const nightMode = dataTheme === 'night'
     const makeStars = (count: number, size: number, opacity: number) => {
       const pos = new Float32Array(count * 3)
       for (let i = 0; i < count; i++) {
@@ -389,8 +393,8 @@ export function SolarNav({
       scene.add(new THREE.Points(geo, mat))
       return mat
     }
-    const starsA = makeStars(520, 1.6, 0.75)
-    const starsB = makeStars(260, 2.2, 0.5)
+    const starsA = makeStars(520, 1.6, nightMode ? 0.5 : 0.75)
+    const starsB = makeStars(260, 2.2, nightMode ? 0.32 : 0.5)
 
     // ---- 太阳 ----
     const sun = new THREE.Mesh(
@@ -666,7 +670,7 @@ export function SolarNav({
       renderer.dispose()
       mount.removeChild(renderer.domElement)
     }
-  }, [])
+  }, [dataTheme])
 
   return <div ref={mountRef} className={`solar-canvas ${className}`.trim()} />
 }

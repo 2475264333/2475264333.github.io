@@ -11,7 +11,7 @@
 :root {
   color-scheme: light;
 
-  /* 色板（亮） */
+  /* 色板（亮 · 简约主题） */
   --paper: #f7f5f0;        /* 暖白纸底（主场） */
   --paper-deep: #efece4;   /* 深一档的纸色（分区） */
   --ink: #1a1c1e;          /* 墨色（文字） */
@@ -22,6 +22,21 @@
   --line: rgba(26, 28, 30, 0.14);
   --white: #ffffff;
 
+  /* 主题派生色 */
+  --header-bg: rgba(247, 245, 240, 0.85);
+  --chip-on-text: #ffffff;           /* 顶栏开关选中态文字 */
+  --btn-ghost-bg: #ffffff;
+  --hover-tint: rgba(20, 154, 137, 0.045);
+  --hero-glow-1: var(--glaze-soft);
+  --hero-glow-2: #f0ead9;
+  --hint: rgba(26, 28, 30, 0.6);     /* 太阳系底部提示文字 */
+  --accent-bright: #149a89;          /* 深底上的亮釉青（团队标签等） */
+  --card-bg: #ffffff;                /* 团队资历卡 */
+  --card-line: rgba(26, 28, 30, 0.14);
+  --team-bg: var(--paper);
+  --team-text: var(--ink);
+  --team-text-soft: rgba(26, 28, 30, 0.75);
+
   /* 字体族 */
   --serif:
     'Fraunces', 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
@@ -31,6 +46,52 @@
 
   --w: min(1120px, calc(100% - 48px));
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- 星空主题（全站深空色） ---------- */
+[data-theme='night'] {
+  color-scheme: dark;
+
+  --paper: #0b0f17;
+  --paper-deep: #10151f;
+  --ink: #eef2f6;
+  --ink-soft: #a8b3c2;
+  --ink-faint: #6f7a8a;
+  --glaze: #2dd4bd;
+  --glaze-soft: rgba(45, 212, 189, 0.12);
+  --line: rgba(238, 242, 246, 0.14);
+
+  --header-bg: rgba(11, 15, 23, 0.82);
+  --chip-on-text: #0b0f17;
+  --btn-ghost-bg: rgba(255, 255, 255, 0.05);
+  --hover-tint: rgba(45, 212, 189, 0.07);
+  --hero-glow-1: rgba(45, 212, 189, 0.1);
+  --hero-glow-2: rgba(56, 80, 124, 0.16);
+  --hint: rgba(207, 224, 238, 0.55);
+  --accent-bright: #5fc7b7;
+  --card-bg: rgba(255, 255, 255, 0.05);
+  --card-line: rgba(255, 255, 255, 0.14);
+  --team-bg: #0d1322;
+  --team-text: #eef2f6;
+  --team-text-soft: rgba(238, 242, 246, 0.75);
+}
+
+/* 主题切换的全局过渡 */
+body,
+.site-header,
+.section,
+.solar,
+.team,
+.vision,
+.contact,
+.site-footer,
+.biz-track,
+.credential,
+.btn.ghost {
+  transition:
+    background-color 0.45s ease,
+    color 0.45s ease,
+    border-color 0.45s ease;
 }
 
 /* ---------- 基础 ---------- */
@@ -125,7 +186,7 @@ h2 {
   height: 66px;
   padding: 0 24px;
   border-bottom: 1px solid var(--line);
-  background: rgba(247, 245, 240, 0.85);
+  background: var(--header-bg);
   backdrop-filter: blur(16px);
 }
 
@@ -187,8 +248,29 @@ h2 {
 }
 
 .lang-switch button.on {
-  color: var(--white);
+  color: var(--chip-on-text);
   background: var(--ink);
+}
+
+/* ---------- 主题切换 ---------- */
+.theme-switch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 32px;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.theme-switch:hover {
+  color: var(--ink);
+  border-color: var(--ink);
 }
 
 /* ---------- Hero（亮） ---------- */
@@ -204,8 +286,8 @@ h2 {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(56% 48% at 88% 12%, var(--glaze-soft), transparent 70%),
-    radial-gradient(40% 36% at 8% 88%, #f0ead9, transparent 70%);
+    radial-gradient(56% 48% at 88% 12%, var(--hero-glow-1), transparent 70%),
+    radial-gradient(40% 36% at 8% 88%, var(--hero-glow-2), transparent 70%);
 }
 
 /* Three.js 点阵数据浪：铺在 hero 下半部，文字浮在其上 */
@@ -376,7 +458,7 @@ h2 {
 .btn.ghost {
   color: var(--ink);
   border: 1px solid var(--line);
-  background: var(--white);
+  background: var(--btn-ghost-bg);
 }
 
 .btn.ghost:hover {
@@ -470,15 +552,41 @@ h2 {
   max-width: 36em;
 }
 
-/* ---------- 导航太阳系（深空之窗） ---------- */
+/* ---------- 导航太阳系（主题化观景窗） ---------- */
+/* 简约主题：明亮晨空感；星空主题：深空原色。颜色由下方变量驱动 */
 .solar {
   position: relative;
-  /* 深邃墨蓝太空渐变——亮色网站里的一扇宇宙观景窗 */
+  --solar-core: var(--paper);
+  --solar-edge-1: rgba(247, 245, 240, 0.86);
+  --solar-edge-2: rgba(226, 230, 232, 0.55);
+  --solar-edge-3: rgba(56, 71, 95, 0.28);
+  --solar-edge-4: rgba(22, 35, 58, 0.08);
+  --solar-out-1: #efece4;
+  --solar-out-2: rgba(239, 236, 228, 0.85);
+  --solar-out-3: rgba(180, 186, 190, 0.5);
+  --solar-out-4: rgba(52, 66, 90, 0.26);
+  --solar-out-5: rgba(11, 20, 36, 0.06);
+  /* 简约主题下仍是深邃墨蓝窗景，与纸面通过长渐变带衔接 */
   background:
     radial-gradient(120% 90% at 50% 0%, #16233a 0%, #0b1424 52%, #060b16 100%);
 }
 
-/* 上下边缘的柔光过渡：渐变带加长，色值对齐相邻版块底色，消除"黑块白块"硬切 */
+[data-theme='night'] .solar {
+  /* 星空主题：窗景融入整片夜空，上下不再需要强烈色差 */
+  --solar-core: #0b0f17;
+  --solar-edge-1: rgba(11, 15, 23, 0);
+  --solar-edge-2: rgba(11, 15, 23, 0);
+  --solar-edge-3: rgba(11, 15, 23, 0);
+  --solar-edge-4: rgba(11, 15, 23, 0);
+  --solar-out-1: #0b0f17;
+  --solar-out-2: rgba(11, 15, 23, 0);
+  --solar-out-3: rgba(11, 15, 23, 0);
+  --solar-out-4: rgba(11, 15, 23, 0);
+  --solar-out-5: rgba(11, 15, 23, 0);
+  background: var(--paper);
+}
+
+/* 上下边缘的柔光过渡：简约主题色值对齐相邻纸色，星空主题隐形 */
 .solar::before,
 .solar::after {
   content: '';
@@ -489,29 +597,29 @@ h2 {
   pointer-events: none;
 }
 
-/* 顶缘：从纸色缓缓沉入夜空（上邻为暖白纸底） */
+/* 顶缘：从纸色缓缓沉入窗景 */
 .solar::before {
   top: 0;
   background: linear-gradient(
     180deg,
-    #f7f5f0 0%,
-    rgba(247, 245, 240, 0.86) 18%,
-    rgba(226, 230, 232, 0.55) 42%,
-    rgba(56, 71, 95, 0.28) 72%,
-    rgba(22, 35, 58, 0.08) 100%
+    var(--solar-core) 0%,
+    var(--solar-edge-1) 18%,
+    var(--solar-edge-2) 42%,
+    var(--solar-edge-3) 72%,
+    var(--solar-edge-4) 100%
   );
 }
 
-/* 底缘：夜空缓缓浮出到深纸色（下邻业务版块为 #efece4） */
+/* 底缘：窗景缓缓浮出到相邻版块底色 */
 .solar::after {
   bottom: 0;
   background: linear-gradient(
     0deg,
-    #efece4 0%,
-    rgba(239, 236, 228, 0.85) 16%,
-    rgba(180, 186, 190, 0.5) 40%,
-    rgba(52, 66, 90, 0.26) 70%,
-    rgba(11, 20, 36, 0.06) 100%
+    var(--solar-out-1) 0%,
+    var(--solar-out-2) 16%,
+    var(--solar-out-3) 40%,
+    var(--solar-out-4) 70%,
+    var(--solar-out-5) 100%
   );
 }
 
@@ -529,8 +637,8 @@ h2 {
   padding: 0 0 30px;
   text-align: center;
   font-size: 13px;
-  /* 提示行落在底部亮色过渡带上，用墨色保证可读 */
-  color: rgba(26, 28, 30, 0.6);
+  /* 提示行随主题换色（简约=墨色落亮带，星空=浅蓝白落夜空） */
+  color: var(--hint);
   letter-spacing: 0.04em;
 }
 
@@ -585,8 +693,8 @@ h2 {
 .biz-track {
   border-radius: 10px;
   padding: 34px 30px;
-  background: var(--white);
-  border: 1px solid var(--line);
+  background: var(--card-bg);
+  border: 1px solid var(--card-line);
   box-shadow: 0 10px 30px rgba(26, 28, 30, 0.06);
 }
 
@@ -657,7 +765,7 @@ h2 {
 }
 
 .ed-list li:hover {
-  background: rgba(20, 154, 137, 0.045);
+  background: var(--hover-tint);
 }
 
 .ed-n {
@@ -679,14 +787,14 @@ h2 {
   max-width: 40em;
 }
 
-/* ---------- 团队 ---------- */
+/* ---------- 团队（主题化：简约=纸色融入，星空=深空强调） ---------- */
 .team {
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--team-bg);
+  color: var(--team-text);
 }
 
 .team .eyebrow {
-  color: #5fc7b7;
+  color: var(--accent-bright);
 }
 
 .team-inner {
@@ -711,7 +819,7 @@ h2 {
 .team-copy p {
   font-size: 16.5px;
   line-height: 1.85;
-  color: rgba(247, 245, 240, 0.78);
+  color: var(--team-text-soft);
 }
 
 .credential-row {
@@ -724,8 +832,8 @@ h2 {
 
 .credential {
   padding: 28px 26px;
-  background: rgba(247, 245, 240, 0.06);
-  border: 1px solid rgba(247, 245, 240, 0.16);
+  background: var(--card-bg);
+  border: 1px solid var(--card-line);
   border-radius: 6px;
 }
 
@@ -733,7 +841,7 @@ h2 {
   display: block;
   font-size: 13px;
   letter-spacing: 0.12em;
-  color: #5fc7b7;
+  color: var(--accent-bright);
   margin-bottom: 12px;
 }
 
@@ -812,6 +920,11 @@ h2 {
   background: var(--paper-deep);
   color: var(--ink-faint);
   font-size: 13px;
+}
+
+/* 星空主题下的太阳系信息卡保持深色玻璃质感（两主题通用） */
+[data-theme='night'] .biz-track {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
 /* ---------- 滚动渐显 ---------- */

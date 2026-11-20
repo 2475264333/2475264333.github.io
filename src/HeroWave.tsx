@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
+import { useDataTheme } from './useDataTheme'
 
 /**
  * HeroWave：亮色点阵数据浪
@@ -13,6 +14,7 @@ import * as THREE from 'three'
  */
 export function HeroWave({ className = '' }: { className?: string }) {
   const mountRef = useRef<HTMLDivElement | null>(null)
+  const dataTheme = useDataTheme()
 
   useEffect(() => {
     const mount = mountRef.current
@@ -51,8 +53,8 @@ export function HeroWave({ className = '' }: { className?: string }) {
     const positions = new Float32Array(count * 3)
     const colors = new Float32Array(count * 3)
 
-    const base = new THREE.Color('#149a89') // 釉青主色
-    const soft = new THREE.Color('#9bb8ad') // 远处的灰绿（层次）
+    const base = new THREE.Color(dataTheme === 'night' ? '#2dd4bd' : '#149a89')
+    const soft = new THREE.Color(dataTheme === 'night' ? '#3d5570' : '#9bb8ad')
 
     let i = 0
     for (let ix = 0; ix < COLS; ix++) {
@@ -81,7 +83,7 @@ export function HeroWave({ className = '' }: { className?: string }) {
       size: 0.05,
       vertexColors: true,
       transparent: true,
-      opacity: 0.9,
+      opacity: dataTheme === 'night' ? 1 : 0.9,
       sizeAttenuation: true,
       depthWrite: false,
     })
@@ -150,7 +152,7 @@ export function HeroWave({ className = '' }: { className?: string }) {
       renderer.dispose()
       mount.removeChild(renderer.domElement)
     }
-  }, [])
+  }, [dataTheme])
 
   return <div ref={mountRef} className={className} aria-hidden="true" />
 }

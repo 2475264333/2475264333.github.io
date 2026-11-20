@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { LangProvider, useLang } from './lang'
+import { ThemeProvider, useTheme } from './theme'
 import { Reveal } from './Reveal'
 import logo from '/assets/logo.png'
 
@@ -16,6 +17,7 @@ const SolarNav = lazy(() =>
 
 function Header() {
   const { lang, t, setLang } = useLang()
+  const { theme, toggleTheme } = useTheme()
   return (
     <header className="site-header">
       <a className="brand" href="#top" aria-label="AccelJoy Tech">
@@ -44,6 +46,14 @@ function Header() {
           EN
         </button>
       </div>
+      <button
+        className="theme-switch"
+        aria-label={theme === 'day' ? 'Switch to night theme' : 'Switch to day theme'}
+        title={theme === 'day' ? '星空主题' : '简约主题'}
+        onClick={toggleTheme}
+      >
+        {theme === 'day' ? '☾' : '☀'}
+      </button>
     </header>
   )
 }
@@ -250,8 +260,10 @@ function Page() {
 
 export default function App() {
   return (
-    <LangProvider>
-      <Page />
-    </LangProvider>
+    <ThemeProvider>
+      <LangProvider>
+        <Page />
+      </LangProvider>
+    </ThemeProvider>
   )
 }
