@@ -71,8 +71,7 @@ function Hero() {
             <RobotArmViewer />
           </Suspense>
           <p className="arm-hint">{t.arm.hint}</p>
-        </div>
-      </div>
+        </div>      </div>
     </section>
   )
 }

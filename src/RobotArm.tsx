@@ -1,17 +1,25 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
-interface ArmRefs {
-  base: THREE.Group
-  shoulder: THREE.Group
-  elbow: THREE.Group
-  wrist: THREE.Group
-  gripL: THREE.Group
-  gripR: THREE.Group
-}
+/**
+ * RobotArmViewer：可触摸操作的 3D 机械臂（纯手势，无按钮）。
+ *
+ * 交互设计：
+ * - 拖空白处 → 环绕旋转视角（OrbitControls）
+ * - 滚轮 / 双指捏合 → 缩放
+ * - 按住机械臂本体拖动 → 直接扳动对应关节：
+ *     基座横拖 = 转身；肩/肘/腕竖拖 = 俯仰；夹爪竖拖 = 开合
+ * - 2.5 秒没人碰 → 恢复轻微"待机呼吸"摆动，页面保持鲜活
+ *
+ * 视觉设计：
+ * - 胶囊连杆 + 车削基座 + 关节釉青环，深灰×釉青双色调
+ * - 真实投影（PCFSoftShadowMap），亮色纸面环境
+ */
 
-export interface ArmPose {
+type JointKey = 'base' | 'shoulder' | 'elbow' | 'wrist' | 'grip'
+
+interface Pose {
   base: number
   shoulder: number
   elbow: number
@@ -19,164 +27,39 @@ export interface ArmPose {
   grip: number
 }
 
-/**
- * RobotArm：一台可用代码"读图纸"的程式化机械臂。
- * 结构（从下往上）：
- *   base(基座旋转) → shoulder(肩) → elbow(肘) → wrist(腕) → 夹爪两指(开合)
- * 全部由基础几何体拼装，无外部模型文件——原创、零版权、几百 KB 内。
- * 支持：拖动旋转视角 / 滚轮缩放 / 关节滑块 / 自动演示。
- */
-export function buildRobotArm(material: THREE.Material): {
-  root: THREE.Group
-  refs: ArmRefs
-} {
-  const root = new THREE.Group()
+const clamp = (v: number, min: number, max: number) =>
+  Math.min(max, Math.max(min, v))
 
-  // ---------- 基座 ----------
-  const base = new THREE.Group()
-
-  const pedestal = new THREE.Mesh(
-    new THREE.CylinderGeometry(1.15, 1.35, 0.28, 36),
-    material,
-  )
-  pedestal.position.y = 0.14
-  base.add(pedestal)
-
-  const turret = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.72, 0.85, 0.62, 36),
-    material,
-  )
-  turret.position.y = 0.59
-  base.add(turret)
-
-  root.add(base)
-
-  // ---------- 肩关节（大臂） ----------
-  const shoulder = new THREE.Group()
-  shoulder.position.y = 0.9
-
-  const shoulderHub = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.34, 0.34, 0.5, 24),
-    material,
-  )
-  shoulderHub.rotation.z = Math.PI / 2
-  shoulder.add(shoulderHub)
-
-  const upperArm = new THREE.Mesh(
-    new THREE.BoxGeometry(0.44, 2.1, 0.52),
-    material,
-  )
-  upperArm.position.y = 1.05
-  shoulder.add(upperArm)
-
-  base.add(shoulder)
-
-  // ---------- 肘关节（小臂） ----------
-  const elbow = new THREE.Group()
-  elbow.position.y = 2.1
-
-  const elbowHub = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.28, 0.28, 0.46, 24),
-    material,
-  )
-  elbowHub.rotation.z = Math.PI / 2
-  elbow.add(elbowHub)
-
-  const forearm = new THREE.Mesh(
-    new THREE.BoxGeometry(0.36, 1.62, 0.42),
-    material,
-  )
-  forearm.position.y = 0.81
-  elbow.add(forearm)
-
-  shoulder.add(elbow)
-
-  // ---------- 腕关节 ----------
-  const wrist = new THREE.Group()
-  wrist.position.y = 1.62
-
-  const wristHub = new THREE.Mesh(
-    new THREE.SphereGeometry(0.22, 20, 16),
-    material,
-  )
-  wrist.add(wristHub)
-
-  const palm = new THREE.Mesh(
-    new THREE.BoxGeometry(0.34, 0.3, 0.3),
-    material,
-  )
-  palm.position.y = 0.18
-  wrist.add(palm)
-
-  elbow.add(wrist)
-
-  // ---------- 夹爪（两指） ----------
-  const makeFinger = (side: 1 | -1) => {
-    const g = new THREE.Group()
-    g.position.set(side * 0.14, 0.33, 0)
-    const stem = new THREE.Mesh(
-      new THREE.BoxGeometry(0.1, 0.34, 0.14),
-      material,
-    )
-    stem.position.y = 0.17
-    g.add(stem)
-    const tip = new THREE.Mesh(
-      new THREE.BoxGeometry(0.1, 0.16, 0.2),
-      material,
-    )
-    tip.position.set(0, 0.4, 0.04)
-    tip.rotation.x = -0.35
-    g.add(tip)
-    return g
-  }
-
-  const gripL = makeFinger(1)
-  const gripR = makeFinger(-1)
-  wrist.add(gripL, gripR)
-
-  return { root, refs: { base, shoulder, elbow, wrist, gripL, gripR } }
+// 各关节的活动范围（弧度 / 夹爪 0-1）
+const JOINT_RANGE: Record<JointKey, [number, number]> = {
+  base: [-Math.PI, Math.PI],
+  shoulder: [-0.95, 0.5],
+  elbow: [-1.7, 0.35],
+  wrist: [-0.9, 0.9],
+  grip: [0, 1],
 }
 
-/** 把滑块姿态应用到机械臂关节上 */
-export function applyPose(refs: ArmRefs, pose: ArmPose) {
-  refs.base.rotation.y = pose.base
-  refs.shoulder.rotation.x = pose.shoulder
-  refs.elbow.rotation.x = pose.elbow
-  refs.wrist.rotation.x = pose.wrist
-  const open = pose.grip
-  refs.gripL.position.x = 0.14 + open * 0.16
-  refs.gripR.position.x = -0.14 - open * 0.16
+const DEFAULT_POSE: Pose = {
+  base: 2.2,
+  shoulder: -0.55,
+  elbow: -0.85,
+  wrist: 0.9,
+  grip: 0.5,
 }
 
-/** 自动演示：每个关节按不同节奏摆动，像在干活 */
-export function autoPose(t: number): ArmPose {
+/** 待机呼吸：基座中心角让弯折面侧对默认相机，Z 形结构清晰可见 */
+function idlePose(t: number): Pose {
   return {
-    base: Math.sin(t * 0.5) * 1.0,
-    shoulder: Math.sin(t * 0.7) * 0.5 - 0.4,
-    elbow: Math.sin(t * 0.9 + 1.2) * 0.7 - 0.5,
-    wrist: Math.sin(t * 1.1 + 0.6) * 0.5,
-    grip: (Math.sin(t * 1.6) * 0.5 + 0.5) * 0.8,
+    base: 2.2 + Math.sin(t * 0.4) * 0.4,
+    shoulder: -0.55 + Math.sin(t * 0.55) * 0.22,
+    elbow: -0.85 + Math.sin(t * 0.7 + 1.1) * 0.3,
+    wrist: 0.9 + Math.sin(t * 0.9 + 0.5) * 0.28,
+    grip: (Math.sin(t * 1.1) * 0.5 + 0.5) * 0.6,
   }
 }
 
-/** 交互式机械臂查看器 */
 export function RobotArmViewer({ className = '' }: { className?: string }) {
   const mountRef = useRef<HTMLDivElement | null>(null)
-  const [pose, setPose] = useState<ArmPose>({
-    base: 0.5,
-    shoulder: -0.2,
-    elbow: -0.5,
-    wrist: 0.2,
-    grip: 0.3,
-  })
-  const [auto, setAuto] = useState(true)
-
-  // refs 是为了在事件回调/动画循环里拿到最新值
-  const poseRef = useRef(pose)
-  poseRef.current = pose
-  const autoRef = useRef(auto)
-  autoRef.current = auto
-  const userPoseRef = useRef<ArmPose>(pose)
 
   useEffect(() => {
     const mount = mountRef.current
@@ -194,80 +77,300 @@ export function RobotArmViewer({ className = '' }: { className?: string }) {
       0.1,
       100,
     )
-    camera.position.set(5.2, 3.6, 6.4)
+    camera.position.set(4.4, 2.2, 6.4)
 
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true })
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     renderer.setSize(mount.clientWidth, mount.clientHeight)
+    renderer.shadowMap.enabled = true
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap
     mount.appendChild(renderer.domElement)
 
-    // 轨道控制器：拖动旋转、滚轮缩放
     const controls = new OrbitControls(camera, renderer.domElement)
     controls.enableDamping = true
     controls.dampingFactor = 0.08
-    controls.minDistance = 4
-    controls.maxDistance = 14
+    controls.minDistance = 4.5
+    controls.maxDistance = 15
     controls.maxPolarAngle = Math.PI / 2.05
-    controls.target.set(0, 1.6, 0)
+    // 相机目标跟随机械臂工作区中心（基座旋转后手臂朝 -X 伸展）
+    controls.target.set(-0.85, 1.5, 0)
 
-    // 灯光：亮色页面里的柔和布光
-    scene.add(new THREE.AmbientLight(0xffffff, 1.1))
-    const key = new THREE.DirectionalLight(0xffffff, 1.6)
-    key.position.set(4, 7, 5)
+    // ---- 灯光 ----
+    scene.add(new THREE.AmbientLight(0xffffff, 1.05))
+    const key = new THREE.DirectionalLight(0xffffff, 1.7)
+    key.position.set(4, 8, 5)
+    key.castShadow = true
+    key.shadow.mapSize.set(1024, 1024)
+    key.shadow.camera.left = -5
+    key.shadow.camera.right = 5
+    key.shadow.camera.top = 6
+    key.shadow.camera.bottom = -2
+    key.shadow.bias = -0.0004
     scene.add(key)
-    const rim = new THREE.DirectionalLight(0x9adcd2, 0.7)
+    const rim = new THREE.DirectionalLight(0x9adcd2, 0.65)
     rim.position.set(-5, 4, -4)
     scene.add(rim)
 
-    // 机械臂本体：釉青色金属质感
-    const material = new THREE.MeshStandardMaterial({
-      color: '#149a89',
-      metalness: 0.55,
-      roughness: 0.32,
+    // ---- 材质：深灰金属 × 釉青关节 ----
+    const darkMat = new THREE.MeshStandardMaterial({
+      color: '#263135',
+      metalness: 0.6,
+      roughness: 0.34,
     })
-    const { root: arm, refs } = buildRobotArm(material)
-    arm.position.y = -1.7
+    const tealMat = new THREE.MeshStandardMaterial({
+      color: '#149a89',
+      metalness: 0.5,
+      roughness: 0.28,
+    })
+    const ringMat = new THREE.MeshStandardMaterial({
+      color: '#2bb3a0',
+      metalness: 0.45,
+      roughness: 0.3,
+    })
+
+    // ---- 组装机械臂 ----
+    const arm = new THREE.Group()
+
+    const hitMeshes: THREE.Mesh[] = []
+    const addHit = (parent: THREE.Object3D, r: number, joint: JointKey) => {
+      const hit = new THREE.Mesh(
+        new THREE.SphereGeometry(r, 12, 8),
+        new THREE.MeshBasicMaterial({
+          transparent: true,
+          opacity: 0,
+          depthWrite: false,
+        }),
+      )
+      hit.userData.joint = joint
+      parent.add(hit)
+      hitMeshes.push(hit)
+    }
+
+    // 基座：车削曲线轮廓
+    const base = new THREE.Group()
+    const profile = [
+      new THREE.Vector2(0.02, 0),
+      new THREE.Vector2(1.3, 0),
+      new THREE.Vector2(1.24, 0.1),
+      new THREE.Vector2(0.92, 0.2),
+      new THREE.Vector2(0.78, 0.46),
+      new THREE.Vector2(0.7, 0.7),
+      new THREE.Vector2(0.5, 0.8),
+      new THREE.Vector2(0.02, 0.82),
+    ]
+    const pedestal = new THREE.Mesh(
+      new THREE.LatheGeometry(profile, 48),
+      darkMat,
+    )
+    base.add(pedestal)
+    const baseRing = new THREE.Mesh(
+      new THREE.TorusGeometry(0.56, 0.035, 12, 40),
+      ringMat,
+    )
+    baseRing.rotation.x = Math.PI / 2
+    baseRing.position.y = 0.8
+    base.add(baseRing)
+    addHit(base, 0.95, 'base')
+    arm.add(base)
+
+    // 肩关节
+    const shoulder = new THREE.Group()
+    shoulder.position.y = 1.02
+    const shoulderHub = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.3, 0.3, 0.46, 28),
+      tealMat,
+    )
+    shoulderHub.rotation.z = Math.PI / 2
+    shoulder.add(shoulderHub)
+    const shoulderRing = new THREE.Mesh(
+      new THREE.TorusGeometry(0.31, 0.028, 12, 36),
+      ringMat,
+    )
+    shoulderRing.rotation.y = Math.PI / 2
+    shoulder.add(shoulderRing)
+    const upperArm = new THREE.Mesh(
+      new THREE.CapsuleGeometry(0.21, 1.5, 8, 20),
+      darkMat,
+    )
+    upperArm.position.y = 0.98
+    shoulder.add(upperArm)
+    addHit(shoulder, 0.6, 'shoulder')
+    base.add(shoulder)
+
+    // 肘关节
+    const elbow = new THREE.Group()
+    elbow.position.y = 1.92
+    const elbowHub = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.24, 0.24, 0.4, 26),
+      tealMat,
+    )
+    elbowHub.rotation.z = Math.PI / 2
+    elbow.add(elbowHub)
+    const elbowRing = new THREE.Mesh(
+      new THREE.TorusGeometry(0.25, 0.024, 12, 32),
+      ringMat,
+    )
+    elbowRing.rotation.y = Math.PI / 2
+    elbow.add(elbowRing)
+    const forearm = new THREE.Mesh(
+      new THREE.CapsuleGeometry(0.155, 1.05, 8, 20),
+      darkMat,
+    )
+    forearm.position.y = 0.68
+    elbow.add(forearm)
+    addHit(elbow, 0.5, 'elbow')
+    shoulder.add(elbow)
+
+    // 腕关节 + 双指夹爪
+    const wrist = new THREE.Group()
+    wrist.position.y = 1.36
+    const wristHub = new THREE.Mesh(
+      new THREE.SphereGeometry(0.17, 22, 16),
+      tealMat,
+    )
+    wrist.add(wristHub)
+    const palm = new THREE.Mesh(
+      new THREE.BoxGeometry(0.32, 0.22, 0.26),
+      darkMat,
+    )
+    palm.position.y = 0.16
+    wrist.add(palm)
+
+    const makeFinger = (side: 1 | -1) => {
+      const g = new THREE.Group()
+      const stem = new THREE.Mesh(
+        new THREE.CapsuleGeometry(0.05, 0.2, 6, 14),
+        tealMat,
+      )
+      stem.position.y = 0.2
+      g.add(stem)
+      const tip = new THREE.Mesh(
+        new THREE.CapsuleGeometry(0.045, 0.1, 6, 14),
+        darkMat,
+      )
+      tip.position.set(0, 0.36, 0.03)
+      tip.rotation.x = -0.5
+      g.add(tip)
+      g.position.x = side * 0.13
+      return g
+    }
+    const gripL = makeFinger(1)
+    const gripR = makeFinger(-1)
+    wrist.add(gripL, gripR)
+    addHit(wrist, 0.42, 'grip')
+    elbow.add(wrist)
+
+    arm.position.y = -1.66
+    arm.traverse((obj) => {
+      const mesh = obj as THREE.Mesh
+      if (mesh.isMesh) mesh.castShadow = true
+    })
     scene.add(arm)
 
-    // 地面圆盘：给机械臂一个"站位"
+    // 地台 + 接收投影
     const floor = new THREE.Mesh(
-      new THREE.CylinderGeometry(2.1, 2.1, 0.1, 48),
+      new THREE.CylinderGeometry(2.15, 2.15, 0.1, 48),
       new THREE.MeshStandardMaterial({
-        color: '#e2f2ef',
-        metalness: 0.1,
-        roughness: 0.9,
+        color: '#e7e3da',
+        metalness: 0.05,
+        roughness: 0.95,
       }),
     )
-    floor.position.y = -1.75
+    floor.position.y = -1.71
+    floor.receiveShadow = true
     scene.add(floor)
 
-    // 自动/手动的姿态过渡由动画循环里的阻尼系数统一处理，切换时不跳变
+    // ---- 纯手势交互：按住关节拖动 ----
+    const raycaster = new THREE.Raycaster()
+    const ndc = new THREE.Vector2()
+    let drag: {
+      joint: JointKey
+      startX: number
+      startY: number
+      start: number
+    } | null = null
+    let lastInteract = -1e9 // 初始就允许待机摆动
+
+    const userPose: Pose = { ...DEFAULT_POSE }
+    const current: Pose = { ...DEFAULT_POSE }
+
+    const onPointerDown = (e: PointerEvent) => {
+      const rect = renderer.domElement.getBoundingClientRect()
+      ndc.x = ((e.clientX - rect.left) / rect.width) * 2 - 1
+      ndc.y = -((e.clientY - rect.top) / rect.height) * 2 + 1
+      raycaster.setFromCamera(ndc, camera)
+      const hits = raycaster.intersectObjects(hitMeshes, false)
+      if (hits.length > 0) {
+        const joint = hits[0].object.userData.joint as JointKey
+        drag = {
+          joint,
+          startX: e.clientX,
+          startY: e.clientY,
+          start: current[joint],
+        }
+        // 按到机械臂时暂停视角旋转，把手势让给关节
+        controls.enabled = false
+        lastInteract = performance.now()
+      }
+    }
+
+    const onPointerMove = (e: PointerEvent) => {
+      if (!drag) return
+      const dy = (e.clientY - drag.startY) / mount.clientHeight
+      const dx = (e.clientX - drag.startX) / mount.clientWidth
+      const [min, max] = JOINT_RANGE[drag.joint]
+      let value: number
+      if (drag.joint === 'base') {
+        value = drag.start + dx * 6 // 横拖 → 转身
+      } else if (drag.joint === 'grip') {
+        value = drag.start - dy * 3 // 竖拖 → 开合
+      } else {
+        value = drag.start - dy * 3.5 // 竖拖 → 俯仰
+      }
+      userPose[drag.joint] = clamp(value, min, max)
+      lastInteract = performance.now()
+    }
+
+    const onPointerUp = () => {
+      drag = null
+      controls.enabled = true
+      lastInteract = performance.now()
+    }
+
+    renderer.domElement.addEventListener('pointerdown', onPointerDown)
+    window.addEventListener('pointermove', onPointerMove)
+    window.addEventListener('pointerup', onPointerUp)
+    window.addEventListener('pointercancel', onPointerUp)
+
+    // ---- 动画循环 ----
+    const applyPose = (p: Pose) => {
+      base.rotation.y = p.base
+      shoulder.rotation.x = p.shoulder
+      elbow.rotation.x = p.elbow
+      wrist.rotation.x = p.wrist
+      gripL.position.x = 0.13 + p.grip * 0.16
+      gripR.position.x = -0.13 - p.grip * 0.16
+    }
+    applyPose(current)
 
     const clock = new THREE.Clock()
     let raf = 0
 
     const animate = () => {
       const t = clock.getElapsedTime()
+      const idle =
+        !drag &&
+        !reduceMotion &&
+        performance.now() - lastInteract > 2500
 
-      let target: ArmPose
-      if (autoRef.current && !reduceMotion) {
-        target = autoPose(t)
-      } else {
-        target = userPoseRef.current
+      // 目标姿态：有人在操作 → 用户姿态；闲着 → 待机呼吸
+      const target = idle ? idlePose(t) : userPose
+      const k = drag ? 0.3 : 0.06 // 操作时跟手，闲时缓慢
+      const keys = Object.keys(current) as JointKey[]
+      for (const key of keys) {
+        current[key] += (target[key] - current[key]) * k
       }
-
-      // 姿态平滑过渡（阻尼），滑块和自动模式切换时不跳变
-      const k = 0.08
-      const current = poseRef.current
-      const next: ArmPose = {
-        base: current.base + (target.base - current.base) * k,
-        shoulder: current.shoulder + (target.shoulder - current.shoulder) * k,
-        elbow: current.elbow + (target.elbow - current.elbow) * k,
-        wrist: current.wrist + (target.wrist - current.wrist) * k,
-        grip: current.grip + (target.grip - current.grip) * k,
-      }
-      applyPose(refs, next)
-      poseRef.current = next
+      applyPose(current)
 
       controls.update()
       renderer.render(scene, camera)
@@ -288,6 +391,10 @@ export function RobotArmViewer({ className = '' }: { className?: string }) {
       cancelAnimationFrame(raf)
       observer.disconnect()
       controls.dispose()
+      renderer.domElement.removeEventListener('pointerdown', onPointerDown)
+      window.removeEventListener('pointermove', onPointerMove)
+      window.removeEventListener('pointerup', onPointerUp)
+      window.removeEventListener('pointercancel', onPointerUp)
       scene.traverse((obj) => {
         const mesh = obj as THREE.Mesh
         if (mesh.geometry) mesh.geometry.dispose()
@@ -300,61 +407,5 @@ export function RobotArmViewer({ className = '' }: { className?: string }) {
     }
   }, [])
 
-  // 滑块 → 用户姿态
-  const setJoint = (key: keyof ArmPose) => (value: number) => {
-    if (autoRef.current) setAuto(false)
-    const next = { ...poseRef.current, [key]: value }
-    userPoseRef.current = next
-    setPose(next)
-  }
-
-  const sliders: {
-    key: keyof ArmPose
-    label: string
-    min: number
-    max: number
-  }[] = [
-    { key: 'base', label: 'base', min: -Math.PI, max: Math.PI },
-    { key: 'shoulder', label: 'shoulder', min: -0.7, max: 0.6 },
-    { key: 'elbow', label: 'elbow', min: -1.1, max: 0.4 },
-    { key: 'wrist', label: 'wrist', min: -0.8, max: 0.8 },
-    { key: 'grip', label: 'grip', min: 0, max: 1 },
-  ]
-
-  return (
-    <div className={`arm-viewer ${className}`.trim()}>
-      <div ref={mountRef} className="arm-canvas" />
-      <div className="arm-panel">
-        <button
-          className={`arm-mode ${auto ? 'on' : ''}`}
-          onClick={() => {
-            if (auto) {
-              // 切回手动：从当前自动姿态继续，避免跳变
-              const stopPose = poseRef.current
-              userPoseRef.current = stopPose
-              setPose(stopPose)
-              setAuto(false)
-            } else {
-              setAuto(true)
-            }
-          }}
-        >
-          {auto ? 'AUTO' : 'MANUAL'}
-        </button>
-        {sliders.map((s) => (
-          <label key={s.key} className="arm-slider">
-            <input
-              type="range"
-              min={s.min}
-              max={s.max}
-              step={0.01}
-              value={pose[s.key]}
-              onChange={(e) => setJoint(s.key)(Number(e.target.value))}
-              style={{ display: auto ? 'none' : undefined }}
-            />
-          </label>
-        ))}
-      </div>
-    </div>
-  )
+  return <div ref={mountRef} className={`arm-canvas ${className}`.trim()} />
 }

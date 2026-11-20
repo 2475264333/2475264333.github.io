@@ -311,10 +311,6 @@ h2 {
 /* Hero 右侧：交互式 3D 机械臂 */
 .hero-arm {
   position: relative;
-}
-
-.arm-viewer {
-  position: relative;
   height: clamp(380px, 44vw, 540px);
   border-radius: 12px;
   overflow: hidden;
@@ -330,7 +326,7 @@ h2 {
 .arm-canvas {
   position: absolute;
   inset: 0;
-  /* 提示：canvas 上的拖动/滚轮默认行为已被 OrbitControls 接管 */
+  /* 手势交互必需：禁用浏览器默认触摸行为，让 pointer 事件直达场景 */
   touch-action: none;
 }
 
@@ -338,57 +334,21 @@ h2 {
   display: block;
 }
 
-.arm-panel {
+.arm-hint {
   position: absolute;
-  right: 12px;
-  bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 10px;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 7px 16px;
   border-radius: 99px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.88);
   border: 1px solid var(--line);
   backdrop-filter: blur(8px);
-}
-
-.arm-mode {
-  min-width: 74px;
-  height: 34px;
-  padding: 0 14px;
-  border: 0;
-  border-radius: 99px;
-  background: var(--ink);
-  color: var(--white);
-  font: inherit;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  cursor: pointer;
-  transition: background-color 0.25s ease;
-}
-
-.arm-mode.on {
-  background: var(--glaze);
-}
-
-.arm-slider {
-  display: inline-flex;
-  align-items: center;
-}
-
-.arm-slider input[type='range'] {
-  width: 110px;
-  height: 4px;
-  accent-color: var(--glaze);
-  cursor: pointer;
-}
-
-.arm-hint {
-  margin-top: 12px;
-  text-align: center;
-  font-size: 13px;
-  color: var(--ink-faint);
+  white-space: nowrap;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  pointer-events: none;
 }
 
 /* ---------- 按钮 ---------- */
