@@ -1,20 +1,18 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 /**
- * RobotArmViewer：可触摸操作的 3D 机械臂（纯手势，无按钮）。
+ * RobotArmViewer：会"追鼠标"的 3D 机械臂（两连杆 IK 解算）。
  *
  * 交互设计：
- * - 拖空白处 → 环绕旋转视角（OrbitControls）
- * - 滚轮 / 双指捏合 → 缩放
- * - 按住机械臂本体拖动 → 直接扳动对应关节：
- *     基座横拖 = 转身；肩/肘/腕竖拖 = 俯仰；夹爪竖拖 = 开合
- * - 2.5 秒没人碰 → 恢复轻微"待机呼吸"摆动，页面保持鲜活
+ * - 鼠标在画面里移动 → 机械臂实时解算肩/肘/腕角度，夹爪始终朝鼠标位置伸取
+ *   （目标点 = 鼠标射线与面向相机的虚拟平面求交，再收敛到可达工作包络内）
+ * - 按住机械臂本体拖动 → 直接扳动对应关节（基座横拖=转身；肩/肘/腕竖拖=俯仰；夹爪竖拖=开合）
+ * - 鼠标离开 / 2.5 秒无操作 → 恢复轻微"待机呼吸"摆动，页面保持鲜活
  *
  * 视觉设计：
  * - 胶囊连杆 + 车削基座 + 关节釉青环，深灰×釉青双色调
- * - 真实投影（PCFSoftShadowMap），亮色纸面环境
+ * - 真实投影（PCFSoftShadowMap），无框悬浮在首屏纸面上
  */
 
 type JointKey = 'base' | 'shoulder' | 'elbow' | 'wrist' | 'grip'
@@ -39,15 +37,7 @@ const JOINT_RANGE: Record<JointKey, [number, number]> = {
   grip: [0, 1],
 }
 
-const DEFAULT_POSE: Pose = {
-  base: 2.2,
-  shoulder: -0.55,
-  elbow: -0.85,
-  wrist: 0.9,
-  grip: 0.5,
-}
-
-/** 待机呼吸：基座中心角让弯折面侧对默认相机，Z 形结构清晰可见 */
+/** 待机呼吸：轻微起伏，手臂自然悬停 */
 function idlePose(t: number): Pose {
   return {
     base: 2.2 + Math.sin(t * 0.4) * 0.4,
@@ -56,6 +46,27 @@ function idlePose(t: number): Pose {
     wrist: 0.9 + Math.sin(t * 0.9 + 0.5) * 0.28,
     grip: (Math.sin(t * 1.1) * 0.5 + 0.5) * 0.6,
   }
+}
+
+/* ---- 两连杆 IK：解算肩/肘俯仰，使夹爪抵达平面内目标点 ----
+ * 结构尺寸取自建模（上臂 1.92、前臂到腕心 1.36，稍收敛保证姿态舒展）。
+ * L1/L2 为有效杆长；返回 null 表示目标不可达（由调用方做包络收敛）。
+ */
+const L1 = 1.72
+const L2 = 1.28
+
+function solveIK(dx: number, dy: number): { shoulder: number; elbow: number } | null {
+  const d2 = dx * dx + dy * dy
+  const d = Math.sqrt(d2)
+  if (d > L1 + L2 || d < Math.abs(L1 - L2) + 0.05) return null
+  // 肘角由余弦定理直接得出（肘向上弯 = 负方向）
+  const cosE = (d2 - L1 * L1 - L2 * L2) / (2 * L1 * L2)
+  const elbow = -Math.acos(clamp(cosE, -1, 1))
+  // 肩角 = 目标方位角 + 三角形补偿角（asin 组合式数值上更稳）
+  const base = Math.atan2(dy, dx)
+  const comp = Math.atan2(L2 * Math.sin(elbow), L1 + L2 * Math.cos(elbow))
+  const shoulder = base - comp
+  return { shoulder, elbow }
 }
 
 export function RobotArmViewer({ className = '' }: { className?: string }) {
@@ -78,6 +89,7 @@ export function RobotArmViewer({ className = '' }: { className?: string }) {
       100,
     )
     camera.position.set(4.4, 2.2, 6.4)
+    camera.lookAt(-0.4, 0.4, 0)
 
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true })
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
@@ -85,15 +97,6 @@ export function RobotArmViewer({ className = '' }: { className?: string }) {
     renderer.shadowMap.enabled = true
     renderer.shadowMap.type = THREE.PCFSoftShadowMap
     mount.appendChild(renderer.domElement)
-
-    const controls = new OrbitControls(camera, renderer.domElement)
-    controls.enableDamping = true
-    controls.dampingFactor = 0.08
-    controls.minDistance = 4.5
-    controls.maxDistance = 15
-    controls.maxPolarAngle = Math.PI / 2.05
-    // 相机目标跟随机械臂工作区中心（基座旋转后手臂朝 -X 伸展）
-    controls.target.set(-0.85, 1.5, 0)
 
     // ---- 灯光 ----
     scene.add(new THREE.AmbientLight(0xffffff, 1.05))
@@ -280,7 +283,7 @@ export function RobotArmViewer({ className = '' }: { className?: string }) {
     floor.receiveShadow = true
     scene.add(floor)
 
-    // ---- 纯手势交互：按住关节拖动 ----
+    // ---- 手势交互：按住关节拖动（覆盖在 IK 之上的手动override）----
     const raycaster = new THREE.Raycaster()
     const ndc = new THREE.Vector2()
     let drag: {
@@ -289,10 +292,61 @@ export function RobotArmViewer({ className = '' }: { className?: string }) {
       startY: number
       start: number
     } | null = null
-    let lastInteract = -1e9 // 初始就允许待机摆动
 
-    const userPose: Pose = { ...DEFAULT_POSE }
-    const current: Pose = { ...DEFAULT_POSE }
+    const userPose: Pose = { base: 2.2, shoulder: -0.55, elbow: -0.85, wrist: 0.9, grip: 0.5 }
+    const current: Pose = { ...userPose }
+
+    // ---- 鼠标追踪（IK 模式）----
+    // 目标点 = 鼠标射线与"过机械臂工作区、面向相机"的虚拟平面的交点。
+    // 手臂在 XZ 平面内追它：base 朝向目标方位，肩/肘/腕由两连杆 IK 解出。
+    const plane = new THREE.Plane(new THREE.Vector3(4.4, 0.6, 6.4).normalize(), 0)
+    const planePoint = new THREE.Vector3()
+    const mouse = new THREE.Vector2()
+    let trackTarget: { x: number; z: number; y: number } | null = null
+
+    const planeCenter = new THREE.Vector3(-0.2, 0.6, 0)
+    // plane 常数项：让平面过 planeCenter
+    plane.constant = -planeCenter.dot(plane.normal)
+
+    const updateTrackTarget = (e: PointerEvent) => {
+      const rect = renderer.domElement.getBoundingClientRect()
+      // 鼠标在容器内才追踪；出界返回 null（动画循环据此回落到待机呼吸）
+      if (
+        e.clientX < rect.left ||
+        e.clientX > rect.right ||
+        e.clientY < rect.top ||
+        e.clientY > rect.bottom
+      ) {
+        trackTarget = null
+        return
+      }
+      mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1
+      mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1
+      raycaster.setFromCamera(mouse, camera)
+      if (raycaster.ray.intersectPlane(plane, planePoint)) {
+        trackTarget = { x: planePoint.x, z: planePoint.z, y: planePoint.y }
+      }
+    }
+
+    const onPointerMove = (e: PointerEvent) => {
+      if (drag) {
+        const dy = (e.clientY - drag.startY) / mount.clientHeight
+        const dx = (e.clientX - drag.startX) / mount.clientWidth
+        const [min, max] = JOINT_RANGE[drag.joint]
+        let value: number
+        if (drag.joint === 'base') {
+          value = drag.start + dx * 6 // 横拖 → 转身
+        } else if (drag.joint === 'grip') {
+          value = drag.start - dy * 3 // 竖拖 → 开合
+        } else {
+          value = drag.start - dy * 3.5 // 竖拖 → 俯仰
+        }
+        userPose[drag.joint] = clamp(value, min, max)
+        return
+      }
+      // 空闲状态下鼠标移动 → 更新 IK 追踪目标
+      updateTrackTarget(e)
+    }
 
     const onPointerDown = (e: PointerEvent) => {
       const rect = renderer.domElement.getBoundingClientRect()
@@ -308,37 +362,20 @@ export function RobotArmViewer({ className = '' }: { className?: string }) {
           startY: e.clientY,
           start: current[joint],
         }
-        // 按到机械臂时暂停视角旋转，把手势让给关节
-        controls.enabled = false
-        lastInteract = performance.now()
       }
-    }
-
-    const onPointerMove = (e: PointerEvent) => {
-      if (!drag) return
-      const dy = (e.clientY - drag.startY) / mount.clientHeight
-      const dx = (e.clientX - drag.startX) / mount.clientWidth
-      const [min, max] = JOINT_RANGE[drag.joint]
-      let value: number
-      if (drag.joint === 'base') {
-        value = drag.start + dx * 6 // 横拖 → 转身
-      } else if (drag.joint === 'grip') {
-        value = drag.start - dy * 3 // 竖拖 → 开合
-      } else {
-        value = drag.start - dy * 3.5 // 竖拖 → 俯仰
-      }
-      userPose[drag.joint] = clamp(value, min, max)
-      lastInteract = performance.now()
     }
 
     const onPointerUp = () => {
       drag = null
-      controls.enabled = true
-      lastInteract = performance.now()
+    }
+
+    const onPointerLeave = () => {
+      trackTarget = null // 鼠标离开画面 → 回待机
     }
 
     renderer.domElement.addEventListener('pointerdown', onPointerDown)
     window.addEventListener('pointermove', onPointerMove)
+    renderer.domElement.addEventListener('pointerleave', onPointerLeave)
     window.addEventListener('pointerup', onPointerUp)
     window.addEventListener('pointercancel', onPointerUp)
 
@@ -358,21 +395,58 @@ export function RobotArmViewer({ className = '' }: { className?: string }) {
 
     const animate = () => {
       const t = clock.getElapsedTime()
-      const idle =
-        !drag &&
-        !reduceMotion &&
-        performance.now() - lastInteract > 2500
 
-      // 目标姿态：有人在操作 → 用户姿态；闲着 → 待机呼吸
-      const target = idle ? idlePose(t) : userPose
-      const k = drag ? 0.3 : 0.06 // 操作时跟手，闲时缓慢
-      const keys = Object.keys(current) as JointKey[]
-      for (const key of keys) {
-        current[key] += (target[key] - current[key]) * k
+      if (drag) {
+        // 手动扳关节：直接跟随用户姿态
+        const k = 0.3
+        for (const key of Object.keys(current) as JointKey[]) {
+          current[key] += (userPose[key] - current[key]) * k
+        }
+      } else if (trackTarget && !reduceMotion) {
+        // IK 追鼠标：把目标收敛到工作包络内再解算
+        const shoulderY = -1.66 + 1.02 // 肩关节世界高度（arm.y + 肩局部y）
+        const wx = trackTarget.x
+        const wz = trackTarget.z
+        const wy = clamp(trackTarget.y, shoulderY - 1.2, shoulderY + 1.9)
+        const baseYaw = Math.atan2(wx, wz) // 基座 y 旋转使臂平面朝向目标方位
+        let dx = Math.hypot(wx, wz) // 目标在臂平面内的水平距离
+        const dy = wy - shoulderY
+        // 极坐标收敛到可达环带内（留余量防抖，方向保持不变）
+        const maxReach = (L1 + L2) * 0.98
+        const minReach = Math.abs(L1 - L2) + 0.35
+        const r = Math.hypot(dx, dy)
+        if (r > maxReach) {
+          const s = maxReach / r
+          dx *= s
+        } else if (r < minReach && r > 0.001) {
+          const s = minReach / r
+          dx *= s
+        }
+        const ik = solveIK(dx, dy)
+        if (ik) {
+          const target: Pose = {
+            base: baseYaw,
+            shoulder: clamp(ik.shoulder, ...JOINT_RANGE.shoulder),
+            elbow: clamp(ik.elbow, ...JOINT_RANGE.elbow),
+            // 腕部补偿：让夹爪保持指向目标（连杆夹角 + 竖直补偿）
+            wrist: clamp(-(ik.shoulder + ik.elbow) * 0.55, ...JOINT_RANGE.wrist),
+            grip: 0.5 + Math.sin(t * 2.2) * 0.18, // 伸取时夹爪轻微开合，像在"够"
+          }
+          const k = 0.085 // 追踪平滑度（越小越柔和）
+          for (const key of Object.keys(current) as JointKey[]) {
+            current[key] += (target[key] - current[key]) * k
+          }
+        }
+      } else {
+        // 待机呼吸
+        const target = idlePose(t)
+        const k = 0.04
+        for (const key of Object.keys(current) as JointKey[]) {
+          current[key] += (target[key] - current[key]) * k
+        }
       }
       applyPose(current)
 
-      controls.update()
       renderer.render(scene, camera)
       raf = requestAnimationFrame(animate)
     }
@@ -390,9 +464,9 @@ export function RobotArmViewer({ className = '' }: { className?: string }) {
     return () => {
       cancelAnimationFrame(raf)
       observer.disconnect()
-      controls.dispose()
       renderer.domElement.removeEventListener('pointerdown', onPointerDown)
       window.removeEventListener('pointermove', onPointerMove)
+      renderer.domElement.removeEventListener('pointerleave', onPointerLeave)
       window.removeEventListener('pointerup', onPointerUp)
       window.removeEventListener('pointercancel', onPointerUp)
       scene.traverse((obj) => {

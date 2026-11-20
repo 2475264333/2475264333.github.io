@@ -317,15 +317,7 @@ h2 {
 .hero-arm {
   position: relative;
   height: clamp(380px, 44vw, 540px);
-  border-radius: 12px;
-  overflow: hidden;
-  background:
-    radial-gradient(80% 70% at 50% 30%, rgba(226, 242, 239, 0.9), rgba(247, 245, 240, 0.4) 70%),
-    var(--white);
-  border: 1px solid var(--line);
-  box-shadow:
-    0 24px 60px rgba(26, 28, 30, 0.14),
-    0 4px 14px rgba(26, 28, 30, 0.07);
+  /* 无框设计：机械臂直接悬浮在首屏纸面上，与点阵背景融为一体 */
 }
 
 .arm-canvas {
@@ -337,23 +329,6 @@ h2 {
 
 .arm-canvas canvas {
   display: block;
-}
-
-.arm-hint {
-  position: absolute;
-  left: 50%;
-  bottom: 14px;
-  transform: translateX(-50%);
-  margin: 0;
-  padding: 7px 16px;
-  border-radius: 99px;
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid var(--line);
-  backdrop-filter: blur(8px);
-  white-space: nowrap;
-  font-size: 12.5px;
-  color: var(--ink-soft);
-  pointer-events: none;
 }
 
 /* ---------- 按钮 ---------- */
