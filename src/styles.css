@@ -160,11 +160,11 @@ blockquote {
 /* ---------- 通用文字 ---------- */
 .eyebrow {
   color: var(--glaze);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  margin-bottom: 22px;
+  margin-bottom: 24px;
 }
 
 h2 {
@@ -542,7 +542,9 @@ h2 {
 .section-head {
   width: var(--w);
   margin: 0 auto 56px;
-  max-width: 780px;
+  /* 统一左对齐：模块名（眉题）固定在首段左侧 */
+  max-width: none;
+  text-align: left;
 }
 
 .section-body {
@@ -857,17 +859,22 @@ h2 {
   width: 100%;
   padding: clamp(110px, 14vw, 170px) 24px;
   background: var(--paper);
-  text-align: center;
+}
+
+.vision .eyebrow,
+.vision h2,
+.vision p:not(.eyebrow) {
+  width: var(--w);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .vision h2 {
-  max-width: 21em;
-  margin: 0 auto;
+  max-width: none;
 }
 
 .vision p:not(.eyebrow) {
-  max-width: 30em;
-  margin: 26px auto 0;
+  margin-top: 26px;
   color: var(--ink-soft);
 }
 
@@ -876,7 +883,13 @@ h2 {
   padding: clamp(100px, 13vw, 150px) 24px;
   background: var(--paper);
   border-top: 1px solid var(--line);
-  text-align: center;
+}
+
+.contact .eyebrow,
+.contact h2 {
+  width: var(--w);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .contact-mail {
@@ -888,6 +901,12 @@ h2 {
   letter-spacing: 0.01em;
   position: relative;
   transition: color 0.3s ease;
+}
+
+/* 邮箱与标题共享同一左缘：容器统一 --w 宽度 */
+.contact-inner {
+  width: var(--w);
+  margin: 0 auto;
 }
 
 .contact-mail::after {

@@ -220,11 +220,13 @@ function Contact() {
   const { t } = useLang()
   return (
     <section className="contact" id="contact">
-      <p className="eyebrow">{t.contact.eyebrow}</p>
-      <h2>{t.contact.title}</h2>
-      <a className="contact-mail" href="mailto:info@acceljoy.com">
-        info@acceljoy.com<span aria-hidden="true"> ↗</span>
-      </a>
+      <div className="contact-inner">
+        <p className="eyebrow">{t.contact.eyebrow}</p>
+        <h2>{t.contact.title}</h2>
+        <a className="contact-mail" href="mailto:info@acceljoy.com">
+          info@acceljoy.com<span aria-hidden="true"> ↗</span>
+        </a>
+      </div>
     </section>
   )
 }
