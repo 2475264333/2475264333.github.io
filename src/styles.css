@@ -331,6 +331,17 @@ h2 {
   display: block;
 }
 
+/* AI 智能核心画布（首屏右翼，无框悬浮） */
+.core-canvas {
+  position: absolute;
+  inset: 0;
+  touch-action: none;
+}
+
+.core-canvas canvas {
+  display: block;
+}
+
 /* ---------- 按钮 ---------- */
 .btn {
   display: inline-flex;

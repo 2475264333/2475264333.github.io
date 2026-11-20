@@ -8,7 +8,7 @@ const HeroWave = lazy(() =>
   import('./HeroWave').then((m) => ({ default: m.HeroWave })),
 )
 const RobotArmViewer = lazy(() =>
-  import('./RobotArm').then((m) => ({ default: m.RobotArmViewer })),
+  import('./NeuralCore').then((m) => ({ default: m.NeuralCore })),
 )
 const SolarNav = lazy(() =>
   import('./SolarNav').then((m) => ({ default: m.SolarNav })),
