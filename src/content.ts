@@ -17,7 +17,6 @@ export interface BizItem {
 }
 
 export interface BizTrack {
-  tag: string
   title: string
   body: string
   items: BizItem[]
@@ -40,8 +39,9 @@ export interface Dictionary {
   team: {
     eyebrow: string
     title: string
-    groups: ListItem[]
-    quote: string
+    copyOne: string
+    copyTwo: string
+    credentials: { label: string; value: string }[]
   }
   manufacturing: { eyebrow: string; title: string; body: string; items: ListItem[] }
   vision: { eyebrow: string; title: string; body: string }
@@ -86,7 +86,6 @@ export const translations: Record<Lang, Dictionary> = {
       title: '双线并进，智造未来',
       body: '两条业务线，同源一处核心能力：让自动化与人工智能在真实世界中经久运转、值得托付。所列皆为深耕场景——您的需求不在此列？以我们的纵深，大概率可以抵达。期待与您率先展开对话。',
       b: {
-        tag: 'To B',
         title: '工厂自动化',
         body: '为现代工厂注入感官与智慧：机器人精密作业，智能系统洞察质量、守护安全、预见设备脉动。',
         items: [
@@ -105,7 +104,6 @@ export const translations: Record<Lang, Dictionary> = {
         ],
       },
       c: {
-        tag: 'To C',
         title: '智能硬件与服务',
         body: '将同一技术淬炼至精简与优雅，融入千家万户的日常。',
         items: [
@@ -122,20 +120,16 @@ export const translations: Record<Lang, Dictionary> = {
     },
     team: {
       eyebrow: '创始团队',
-      title: '一语论文，一语车间，双语并行。',
-      groups: [
-        {
-          n: 'A',
-          title: '研究之翼',
-          text: '清华、耶鲁、剑桥——对复杂问题的品味与敬畏，在顶尖实验室的日日夜夜里淬炼而成。',
-        },
-        {
-          n: 'B',
-          title: '产业之根',
-          text: '三十载工厂生产与进出口——对可靠性、成本与交付的判断力，在产线与货柜之侧千锤百炼。',
-        },
+      title: '有国际视野，有技术，懂供应链。',
+      copyOne:
+        '创始团队来自清华大学、耶鲁大学、剑桥大学等海内外名校，兼具前沿研究视野与跨文化协作经验。',
+      copyTwo:
+        '与此同时，团队拥有 30 年进出口和工厂生产经验，能够从制造、供应链和全球交付的角度理解技术落地。',
+      credentials: [
+        { label: '学术背景', value: '中国 + 海外' },
+        { label: '研究视角', value: 'AI、机器人、系统' },
+        { label: '产业经验', value: '工厂生产' },
       ],
-      quote: '论文昭示何为可能，车间笃定何为可行——而我们将两者熔于一炉。',
     },
     manufacturing: {
       eyebrow: '制造与全球贸易',
@@ -212,7 +206,6 @@ export const translations: Record<Lang, Dictionary> = {
       title: 'Two lines, one future',
       body: 'Two product lines, one core capability: automation and AI that endure in the real world and earn trust over time. What follows is our home ground — yet if your need lies beyond this list, chances are we can still reach it. We look forward to the conversation.',
       b: {
-        tag: 'To B',
         title: 'Factory automation',
         body: 'Senses and intelligence for the modern plant: robots working with precision while intelligent systems watch quality, guard safety, and read the pulse of equipment.',
         items: [
@@ -231,7 +224,6 @@ export const translations: Record<Lang, Dictionary> = {
         ],
       },
       c: {
-        tag: 'To C',
         title: 'Smart hardware & services',
         body: 'The same technology, refined into something simpler and more graceful, woven into everyday life.',
         items: [
@@ -247,21 +239,17 @@ export const translations: Record<Lang, Dictionary> = {
       },
     },
     team: {
-      eyebrow: 'Team',
-      title: 'Two native languages: the paper, and the floor.',
-      groups: [
-        {
-          n: 'A',
-          title: 'The research wing',
-          text: 'Tsinghua, Yale, Cambridge — a taste for hard problems, forged in the long nights of world-class laboratories.',
-        },
-        {
-          n: 'B',
-          title: 'The industrial root',
-          text: 'Thirty years of factory production and import-export — judgment on reliability, cost and delivery, tempered beside production lines and shipping containers.',
-        },
+      eyebrow: 'Founder Team',
+      title: 'Global perspective, technical depth, and supply-chain fluency.',
+      copyOne:
+        'The founding team comes from Tsinghua University, Yale University, Cambridge University and other leading institutions in China and abroad.',
+      copyTwo:
+        'The company combines research perspective with a rare operating base: 30 years of import-export and factory production experience.',
+      credentials: [
+        { label: 'Academic Network', value: 'China + Global' },
+        { label: 'Research Lens', value: 'AI, robotics, systems' },
+        { label: 'Operating Base', value: 'Factory production' },
       ],
-      quote: 'Papers reveal what is possible; the floor confirms what is practical — we forge the two into one.',
     },
     manufacturing: {
       eyebrow: 'Manufacturing & Global Trade',

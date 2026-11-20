@@ -564,7 +564,7 @@ h2 {
   color: #4adbc6;
 }
 
-/* ---------- 业务双栏（To B × To C，亮色） ---------- */
+/* ---------- 业务双栏（亮色） ---------- */
 .biz-grid {
   display: grid;
   grid-template-columns: 1.05fr 0.95fr;
@@ -590,26 +590,6 @@ h2 {
 /* C 端：白卡 + 暖橙顶线，区分两条线 */
 .biz-c {
   border-top: 4px solid #d99a3d;
-}
-
-.biz-tag {
-  display: inline-block;
-  padding: 5px 14px;
-  border-radius: 99px;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  margin-bottom: 22px;
-}
-
-.biz-b .biz-tag {
-  color: var(--glaze);
-  background: var(--glaze-soft);
-}
-
-.biz-c .biz-tag {
-  color: #a66a14;
-  background: #f8ecd9;
 }
 
 .biz-track h3 {
@@ -701,60 +681,58 @@ h2 {
   color: #5fc7b7;
 }
 
-.team-cols {
+.team-inner {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 18px;
+  gap: 48px;
   width: var(--w);
   margin: 0 auto;
+  align-items: start;
 }
 
-.team-col {
-  padding: 36px 32px;
+.team-inner .section-head {
+  margin: 0;
+}
+
+.team-copy {
+  display: grid;
+  gap: 18px;
+  padding-top: 6px;
+}
+
+.team-copy p {
+  font-size: 16.5px;
+  line-height: 1.85;
+  color: rgba(247, 245, 240, 0.78);
+}
+
+.credential-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  width: var(--w);
+  margin: 64px auto 0;
+}
+
+.credential {
+  padding: 28px 26px;
   background: rgba(247, 245, 240, 0.06);
   border: 1px solid rgba(247, 245, 240, 0.16);
   border-radius: 6px;
 }
 
-.team-letter {
-  font-family: var(--serif);
-  font-size: 15px;
-  color: #5fc7b7;
+.credential span {
   display: block;
-  margin-bottom: 46px;
-}
-
-.team-col h3 {
-  font-family: var(--serif);
-  font-size: 24px;
-  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  color: #5fc7b7;
   margin-bottom: 12px;
 }
 
-.team-col p {
-  color: rgba(247, 245, 240, 0.68);
-}
-
-.team-quote {
-  width: var(--w);
-  margin: 72px auto 0;
+.credential strong {
   font-family: var(--serif);
-  font-size: clamp(24px, 3.4vw, 38px);
-  font-weight: 500;
-  line-height: 1.35;
-  max-width: 26em;
-}
-
-.team-quote::before {
-  content: '“';
-  color: #5fc7b7;
-  margin-right: 2px;
-}
-
-.team-quote::after {
-  content: '”';
-  color: #5fc7b7;
-  margin-left: 2px;
+  font-size: clamp(19px, 2vw, 23px);
+  font-weight: 600;
 }
 
 /* ---------- 愿景 ---------- */
@@ -858,8 +836,14 @@ h2 {
     display: none;
   }
 
-  .team-cols {
+  .team-inner {
     grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .credential-row {
+    grid-template-columns: 1fr;
+    margin-top: 44px;
   }
 
   .biz-grid {
@@ -888,8 +872,8 @@ h2 {
     gap: 8px;
   }
 
-  .team-col {
-    padding: 28px 22px;
+  .credential {
+    padding: 22px 20px;
   }
 
   .biz-track {

@@ -117,7 +117,6 @@ function Business() {
       </div>
       <div className="biz-grid">
         <div className="biz-track biz-b">
-          <span className="biz-tag">{b.tag}</span>
           <h3>{b.title}</h3>
           <p className="biz-lead">{b.body}</p>
           <ul className="biz-items">
@@ -130,7 +129,6 @@ function Business() {
           </ul>
         </div>
         <div className="biz-track biz-c">
-          <span className="biz-tag">{c.tag}</span>
           <h3>{c.title}</h3>
           <p className="biz-lead">{c.body}</p>
           <ul className="biz-items">
@@ -151,20 +149,24 @@ function Team() {
   const { t } = useLang()
   return (
     <Reveal as="section" className="section team" id="team">
-      <div className="section-head">
-        <p className="eyebrow">{t.team.eyebrow}</p>
-        <h2>{t.team.title}</h2>
+      <div className="team-inner">
+        <div className="section-head">
+          <p className="eyebrow">{t.team.eyebrow}</p>
+          <h2>{t.team.title}</h2>
+        </div>
+        <div className="team-copy">
+          <p>{t.team.copyOne}</p>
+          <p>{t.team.copyTwo}</p>
+        </div>
       </div>
-      <div className="team-cols">
-        {t.team.groups.map((g) => (
-          <div className="team-col" key={g.n}>
-            <span className="team-letter">{g.n}</span>
-            <h3>{g.title}</h3>
-            <p>{g.text}</p>
+      <div className="credential-row">
+        {t.team.credentials.map((cred) => (
+          <div className="credential" key={cred.label}>
+            <span>{cred.label}</span>
+            <strong>{cred.value}</strong>
           </div>
         ))}
       </div>
-      <blockquote className="team-quote">{t.team.quote}</blockquote>
     </Reveal>
   )
 }
