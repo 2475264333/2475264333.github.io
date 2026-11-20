@@ -1,6 +1,12 @@
+import { lazy, Suspense } from 'react'
 import { LangProvider, useLang } from './lang'
 import { Reveal } from './Reveal'
 import logo from '/assets/logo.png'
+
+// 懒加载 3D 场景：three.js 体积不小，让它和首屏文字并行加载，不互相阻塞
+const HeroWave = lazy(() =>
+  import('./HeroWave').then((m) => ({ default: m.HeroWave })),
+)
 
 function Header() {
   const { lang, t, setLang } = useLang()
@@ -40,6 +46,9 @@ function Hero() {
   const { t } = useLang()
   return (
     <section className="hero" id="top">
+      <Suspense fallback={null}>
+        <HeroWave className="hero-wave" />
+      </Suspense>
       <div className="hero-inner">
         <div className="hero-copy">
           <p className="eyebrow">{t.hero.eyebrow}</p>
